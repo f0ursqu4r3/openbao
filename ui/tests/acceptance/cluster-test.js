@@ -47,7 +47,7 @@ module('Acceptance | cluster', function (hooks) {
     await authPage.login(userToken);
     await visit('/vault/access');
 
-    assert.dom('[data-test-sidebar-nav-link="Policies"]').doesNotExist();
+    assert.dom('[data-test-sidebar-nav-link="ACL Policies"]').doesNotExist();
     await logout.visit();
     await settled();
   });

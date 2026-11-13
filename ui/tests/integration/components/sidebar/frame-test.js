@@ -35,7 +35,7 @@ module('Integration | Component | sidebar-frame', function (hooks) {
     assert.dom('.page-container').exists('Block yields for app content');
   });
 
-  test('it should render logo and actions in sidebar header', async function (assert) {
+  test('it should render the logo in the sidebar and the actions in the top bar', async function (assert) {
     this.owner.lookup('service:currentCluster').setCluster({ name: 'vault' });
 
     await render(hbs`
@@ -43,11 +43,13 @@ module('Integration | Component | sidebar-frame', function (hooks) {
     `);
 
     assert.dom('[data-test-sidebar-logo]').exists('OpenBao logo renders in sidebar header');
-    assert.dom('[data-test-console-toggle]').exists('Console toggle button renders in sidebar header');
+    assert.dom('[data-test-console-toggle]').exists('Console toggle button renders in the top bar');
     await click('[data-test-console-toggle]');
     assert.dom('.panel-open').exists('Console ui panel opens');
     await click('[data-test-console-toggle]');
     assert.dom('.panel-open').doesNotExist('Console ui panel closes');
     assert.dom('[data-test-user-menu]').exists('User menu renders');
+    assert.dom('[data-test-topbar] [data-test-user-menu]').exists('User menu is in the top bar');
+    assert.dom('[data-test-topbar-search]').exists('Search renders in the top bar');
   });
 });

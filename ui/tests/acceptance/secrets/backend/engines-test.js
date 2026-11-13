@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import { currentRouteName, settled } from '@ember/test-helpers';
+import { click, currentRouteName, settled } from '@ember/test-helpers';
 import { clickTrigger } from 'ember-power-select/test-support/helpers';
 import { create } from 'ember-cli-page-object';
 import { module, test } from 'qunit';
@@ -52,6 +52,24 @@ module('Acceptance | secret-engine list view', function (hooks) {
       0,
       'does not show the disabled engine'
     );
+  });
+
+  test('it shows and closes the engine detail panel', async function (assert) {
+    await backendsPage.visit();
+    await settled();
+    assert.dom('[data-test-engine-detail]').doesNotExist('the panel is closed at the start');
+
+    await click('[data-test-engine-detail-toggle="secret"]');
+    assert.dom('[data-test-engine-detail-path]').hasText('secret/', 'the panel shows the engine path');
+    assert.dom('[data-test-engine-detail-accessor]').includesText('kv_', 'the panel shows the accessor');
+    assert.strictEqual(
+      currentRouteName(),
+      'vault.cluster.secrets.backends',
+      'the detail button does not open the engine'
+    );
+
+    await click('[data-test-engine-detail-close]');
+    assert.dom('[data-test-engine-detail]').doesNotExist('the close button closes the panel');
   });
 
   test('it filters by name and engine type', async function (assert) {

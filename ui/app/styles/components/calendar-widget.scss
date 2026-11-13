@@ -83,7 +83,7 @@ $dark-gray: #535f73;
   grid-template-columns: 1fr;
   grid-template-rows: 0.7fr 3fr;
   box-shadow: $box-shadow, $box-shadow-middle;
-  background-color: white;
+  background-color: $white;
   border-radius: $radius;
 }
 

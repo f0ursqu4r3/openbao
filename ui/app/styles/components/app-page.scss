@@ -1,0 +1,648 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+// Page shell for all authenticated routes (see templates/vault/cluster.hbs).
+// Content is left-aligned next to the sidebar, with one gutter and one max width.
+
+$app-page-gutter: $spacing-xl;
+$app-page-max-width: 1440px;
+// Forms are capped so that fields stay a readable width.
+$app-page-reading-width: 880px;
+
+.app-page {
+  padding: 0 $app-page-gutter;
+
+  @include until($mobile) {
+    padding: 0 $spacing-m;
+  }
+
+  > .container.app-page__content {
+    margin: 0;
+    max-width: $app-page-max-width;
+  }
+
+  // Header: breadcrumb, then one row with the title on the left and actions on the right.
+  .page-header {
+    padding-top: $spacing-l;
+    padding-bottom: $spacing-m;
+
+    .level {
+      align-items: center;
+      gap: $spacing-m;
+    }
+
+    .title {
+      font-size: $size-3;
+      line-height: 1.25;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .breadcrumb {
+      margin-bottom: $spacing-xs;
+    }
+
+    .breadcrumb + .level .title {
+      margin-top: 0;
+    }
+
+    .hds-button {
+      white-space: nowrap;
+    }
+  }
+
+  // Toolbar: a flat row under the header instead of a gray box.
+  // The list or empty state below it draws the separator line.
+  .toolbar {
+    background-color: transparent;
+    border: 0;
+
+    &::after {
+      content: none;
+    }
+  }
+
+  .toolbar-scroller {
+    height: 52px;
+    padding: 0;
+  }
+
+  form {
+    max-width: $app-page-reading-width;
+  }
+
+  // Full-width boxes draw only their top and bottom lines, so a capped form has no side edges.
+  .box.is-fullwidth {
+    box-shadow:
+      0 -1px 0 0 rgba($grey-dark, 0.3),
+      0 1px 0 0 rgba($grey-dark, 0.3);
+  }
+
+  // List rows: one light separator line. Hover changes the background and does not move the row.
+  .list-item-row {
+    box-shadow: 0 1px 0 0 $ui-gray-200;
+    padding: $spacing-s;
+  }
+
+  a.list-item-row,
+  .linked-block.list-item-row {
+    transition: background-color $speed;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: $ui-gray-050;
+      box-shadow: 0 1px 0 0 $ui-gray-200;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      padding-left: $spacing-s;
+      padding-right: $spacing-s;
+    }
+  }
+
+  // Tabs at the top of a page, above the page header (see the Tools page).
+  .box.tools-tabs {
+    box-shadow: none;
+    margin-top: $spacing-s;
+  }
+
+  // Filter forms inside a toolbar keep the toolbar's own sizing.
+  .toolbar form {
+    max-width: none;
+  }
+}
+
+// Page subtitle: one line under the page title.
+.page-subtitle {
+  color: $ui-gray-600;
+  margin-top: $spacing-xxs;
+}
+
+// Stat cards: a row of summary values above a list.
+.stat-cards {
+  display: grid;
+  gap: $spacing-m;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: $spacing-m;
+}
+
+.stat-card {
+  align-items: flex-start;
+  background-color: $white;
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+  display: flex;
+  gap: $spacing-s;
+  padding: $spacing-m;
+}
+
+.stat-card__icon {
+  color: $green-700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.stat-card__label {
+  color: $ui-gray-600;
+  font-size: $size-8;
+}
+
+.stat-card__value {
+  color: $ui-gray-900;
+  font-size: $size-5;
+  font-weight: $font-weight-bold;
+  line-height: 1.3;
+}
+
+.stat-card__detail {
+  color: $ui-gray-600;
+  font-size: $size-8;
+}
+
+// Engine table: a bordered list where each row is a grid with fixed columns.
+$engine-table-columns: minmax(160px, 1.4fr) 130px minmax(160px, 1fr) 150px minmax(0, 2fr) 32px 40px;
+$engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
+
+// No overflow clipping here: the row menu opens below the row and can extend past the table.
+.engine-table {
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+}
+
+.engine-table__head,
+.app-page .engine-table__row {
+  align-items: center;
+  column-gap: $spacing-m;
+  display: grid;
+  grid-template-columns: $engine-table-columns;
+  padding: $spacing-s $spacing-m;
+
+  @include until(1200px) {
+    grid-template-columns: $engine-table-columns-narrow;
+  }
+}
+
+.engine-table__head {
+  background-color: $ui-gray-050;
+  border-radius: 7px 7px 0 0;
+  border-bottom: 1px solid $ui-gray-200;
+  color: $ui-gray-600;
+  font-size: $size-8;
+  font-weight: $font-weight-semibold;
+}
+
+.app-page .engine-table__row {
+  &:hover,
+  &:focus,
+  &:active {
+    padding: $spacing-s $spacing-m;
+  }
+
+  &:last-child {
+    border-radius: 0 0 7px 7px;
+    box-shadow: none;
+  }
+}
+
+.engine-table__path {
+  align-items: center;
+  display: flex;
+  gap: $spacing-xs;
+  min-width: 0;
+}
+
+.engine-table__description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.engine-table__optional {
+  @include until(1200px) {
+    display: none;
+  }
+}
+
+// The row menu always sits in the last column.
+.engine-table__row .linkable-item-menu {
+  grid-column: -2;
+  justify-self: end;
+}
+
+.engine-table__empty {
+  padding: $spacing-l;
+  text-align: center;
+}
+
+// Top bar: search on the left, help, console, and user menu on the right.
+// It uses the sidebar surface color, so the sidebar icon buttons keep their look.
+$app-topbar-height: 56px;
+
+.app-topbar {
+  align-items: center;
+  background-color: var(--token-side-nav-color-surface-primary);
+  display: flex;
+  gap: $spacing-m;
+  height: $app-topbar-height;
+  justify-content: space-between;
+  padding: 0 $app-page-gutter;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  @include until($mobile) {
+    padding: 0 $spacing-m;
+  }
+}
+
+.app-topbar ~ .page-container {
+  min-height: calc(100vh - #{$app-topbar-height});
+}
+
+.app-topbar__actions {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  gap: $spacing-xs;
+
+  .hds-side-nav__icon-button {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+  }
+}
+
+.topbar-search {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+
+.topbar-search__icon {
+  color: rgba($pure-white, 0.7);
+  left: $spacing-s;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.topbar-search__input {
+  background-color: rgba($pure-white, 0.1);
+  border: 1px solid rgba($pure-white, 0.2);
+  border-radius: 6px;
+  color: $pure-white;
+  font-size: $size-7;
+  height: 36px;
+  padding: 0 64px 0 36px;
+  width: 100%;
+
+  &::placeholder {
+    color: rgba($pure-white, 0.65);
+  }
+
+  &:focus {
+    background-color: rgba($pure-white, 0.16);
+    border-color: rgba($pure-white, 0.6);
+    outline: none;
+  }
+}
+
+.topbar-search__hint {
+  border: 1px solid rgba($pure-white, 0.3);
+  border-radius: 4px;
+  color: rgba($pure-white, 0.75);
+  font-family: inherit;
+  font-size: $size-9;
+  padding: 0 6px;
+  pointer-events: none;
+  position: absolute;
+  right: $spacing-xs;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.topbar-search__results {
+  background-color: $white;
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba($pure-black, 0.5);
+  left: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: $spacing-xxs;
+  position: absolute;
+  right: 0;
+  top: calc(100% + #{$spacing-xxs});
+  z-index: 30;
+
+  &.is-hidden {
+    display: none;
+  }
+}
+
+.topbar-search__result {
+  align-items: center;
+  border-radius: 6px;
+  color: $ui-gray-900;
+  cursor: pointer;
+  display: flex;
+  gap: $spacing-xs;
+  padding: $spacing-xs $spacing-s;
+
+  &:hover,
+  &.is-active {
+    background-color: $ui-gray-100;
+  }
+}
+
+.topbar-search__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar-search__detail,
+.topbar-search__empty {
+  color: $ui-gray-600;
+  font-size: $size-8;
+}
+
+.topbar-search__empty {
+  padding: $spacing-xs $spacing-s;
+}
+
+// Engine layout: the table, plus a detail panel at the right when an engine is selected.
+$engine-detail-width: 360px;
+
+.engine-layout {
+  align-items: start;
+  display: grid;
+  gap: $spacing-m;
+  grid-template-columns: minmax(0, 1fr);
+
+  &.has-detail {
+    grid-template-columns: minmax(0, 1fr) $engine-detail-width;
+
+    @include until(1100px) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    // with the panel open, the table uses its narrow column set
+    .engine-table__head,
+    .engine-table__row {
+      grid-template-columns: $engine-table-columns-narrow;
+    }
+
+    .engine-table__optional {
+      display: none;
+    }
+  }
+}
+
+.engine-table__detail-button,
+.engine-detail__close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: $ui-gray-600;
+  cursor: pointer;
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  padding: 0;
+  width: 28px;
+
+  &:hover,
+  &.is-active {
+    background-color: $ui-gray-200;
+    color: $ui-gray-900;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue-500;
+    outline-offset: 1px;
+  }
+}
+
+.engine-detail {
+  background-color: $ui-gray-050;
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+  padding: $spacing-m;
+}
+
+.engine-detail__header {
+  align-items: flex-start;
+  display: flex;
+  gap: $spacing-s;
+  margin-bottom: $spacing-m;
+}
+
+.engine-detail__title {
+  flex: 1;
+  min-width: 0;
+
+  .title {
+    margin-bottom: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.engine-detail__type {
+  color: $ui-gray-600;
+  font-size: $size-8;
+}
+
+.engine-detail__list {
+  column-gap: $spacing-m;
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  margin-bottom: $spacing-m;
+
+  dt,
+  dd {
+    border-top: 1px solid $ui-gray-200;
+    margin: 0;
+    padding: $spacing-xs 0;
+  }
+
+  dt {
+    color: $ui-gray-600;
+  }
+
+  dd {
+    overflow-wrap: anywhere;
+  }
+}
+
+.engine-detail__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+}
+
+// Secret explorer: a folder tree at the left of the secret list.
+.secret-explorer.has-tree {
+  align-items: start;
+  display: grid;
+  gap: $spacing-m;
+  grid-template-columns: 240px minmax(0, 1fr);
+  margin-top: $spacing-s;
+
+  @include until(900px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.secret-explorer__main {
+  min-width: 0;
+}
+
+.secret-tree {
+  background-color: $ui-gray-050;
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+  max-height: 70vh;
+  overflow: auto;
+  padding: $spacing-xs;
+}
+
+.secret-tree__list {
+  list-style: none;
+  margin: 0;
+  padding-left: $spacing-m;
+
+  &.is-root {
+    padding-left: 0;
+  }
+}
+
+.secret-tree__row {
+  align-items: center;
+  border-radius: 6px;
+  display: flex;
+  gap: 2px;
+
+  &:hover {
+    background-color: $ui-gray-100;
+  }
+
+  &.is-current {
+    background-color: $ui-gray-200;
+
+    .secret-tree__link {
+      color: $ui-gray-900;
+      font-weight: $font-weight-semibold;
+    }
+  }
+}
+
+.secret-tree__toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: $ui-gray-600;
+  cursor: pointer;
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 24px;
+  justify-content: center;
+  padding: 0;
+  width: 24px;
+
+  &:hover {
+    color: $ui-gray-900;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue-500;
+    outline-offset: 1px;
+  }
+}
+
+.secret-tree__link {
+  align-items: center;
+  color: $ui-gray-800;
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  min-width: 0;
+  padding: 5px $spacing-xs 5px 2px;
+  text-decoration: none;
+}
+
+.secret-tree__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.secret-tree__note {
+  color: $ui-gray-600;
+  font-size: $size-8;
+  padding: $spacing-xxs $spacing-xs $spacing-xxs 30px;
+}
+
+// Cluster name and seal state at the top of the sidebar.
+.sidebar-cluster-status {
+  border-bottom: 1px solid rgba($pure-white, 0.12);
+  color: $pure-white;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: $spacing-s;
+  padding: 0 $spacing-xs $spacing-s;
+}
+
+.sidebar-cluster-status__name {
+  font-weight: $font-weight-semibold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-cluster-status__state {
+  align-items: center;
+  display: flex;
+  font-size: $size-8;
+  gap: 6px;
+  opacity: 0.85;
+}
+
+.sidebar-cluster-status__dot {
+  background-color: $green-300;
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
+
+  &.is-sealed {
+    background-color: $ui-gray-300;
+  }
+}
+
+// On pages with the shell, the footer follows the same gutter as the page content.
+.app-page ~ .footer {
+  padding: $spacing-s $app-page-gutter;
+  text-align: left !important;
+}
+
+// The development banner sits at the right of the footer row, clear of the footer links.
+.app-page ~ .env-banner {
+  align-self: flex-end;
+  margin: -34px $app-page-gutter 10px 0;
+}
+
+// Sign-in and other splash pages: a light gray page with the title centered above the white form.
+.page-container:has(> .splash-page-container) {
+  background-color: $ui-gray-050;
+}
+
+.splash-page-header .is-flex-row {
+  justify-content: center;
+}

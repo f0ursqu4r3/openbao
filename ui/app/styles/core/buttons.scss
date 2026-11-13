@@ -71,7 +71,7 @@
     background-color: $red-500;
     border-color: color.adjust($red-500, $lightness: -2%, $space: hsl);
     color: $white;
-    text-shadow: 0 1px 1px rgba($black, 0.25);
+    text-shadow: 0 1px 1px rgba($pure-black, 0.25);
 
     &:hover:not([disabled]) {
       background-color: color.adjust($red-500, $lightness: -5%, $space: hsl);
@@ -154,7 +154,7 @@
     border-color: color.adjust($blue, $lightness: -2%, $space: hsl);
     color: $white;
     font-weight: $font-weight-bold;
-    text-shadow: 0 1px 1px rgba($black, 0.25);
+    text-shadow: 0 1px 1px rgba($pure-black, 0.25);
 
     &:disabled {
       background-color: $ui-gray-700;

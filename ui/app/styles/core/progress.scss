@@ -30,7 +30,7 @@
 
 // style the container in chrome
 .progress[value]::-webkit-progress-bar {
-  background-color: #ededed;
+  background-color: $ui-gray-200;
   box-shadow: inset $box-link-shadow;
 }
 
@@ -66,7 +66,7 @@
 }
 
 .progress.is-info:indeterminate {
-  background-image: linear-gradient(to right, #3e8ed0 30%, #ededed 30%);
+  background-image: linear-gradient(to right, #3e8ed0 30%, $ui-gray-200 30%);
 }
 
 .progress.is-success::-webkit-progress-value {
@@ -82,5 +82,5 @@
 }
 
 .progress.is-success:indeterminate {
-  background-image: linear-gradient(to right, $green-500 30%, #ededed 30%);
+  background-image: linear-gradient(to right, $green-500 30%, $ui-gray-200 30%);
 }

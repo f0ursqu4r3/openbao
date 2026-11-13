@@ -1,0 +1,70 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+// Dark theme fixes for elements that take their colors from the browser or from a vendor stylesheet.
+
+.input,
+.textarea,
+.select select,
+.input-hint,
+select {
+  background-color: $ui-gray-050;
+  border-color: $ui-gray-300;
+  color: $ui-gray-900;
+
+  &::placeholder {
+    color: $ui-gray-500;
+  }
+}
+
+.input,
+.textarea {
+  box-shadow: inset 0 2px 1px rgba($pure-black, 0.25);
+}
+
+// ember-power-select and ember-basic-dropdown
+.ember-power-select-trigger,
+.ember-power-select-dropdown,
+.ember-power-select-search-input,
+.ember-power-select-trigger-multiple-input,
+.ember-basic-dropdown-content {
+  background-color: $ui-gray-050;
+  border-color: $ui-gray-300;
+  color: $ui-gray-900;
+}
+
+.ember-power-select-option[aria-current='true'],
+.ember-power-select-option[aria-selected='true'] {
+  background-color: $ui-gray-200;
+  color: $ui-gray-900;
+}
+
+.ember-power-select-placeholder {
+  color: $ui-gray-500;
+}
+
+// Raised surfaces: menus and dropdowns sit one step above the page surface.
+.popup-menu-content .box {
+  background-color: $ui-gray-100;
+  box-shadow:
+    0 0 0 1px $ui-gray-300,
+    0 8px 24px rgba($pure-black, 0.5);
+
+  button.link,
+  .ember-power-select-option,
+  .ember-power-select-option[aria-current='true'],
+  a {
+    background-color: transparent;
+
+    &:hover {
+      background-color: $ui-gray-200;
+    }
+  }
+}
+
+.modal-background {
+  background: $pure-black;
+  opacity: 0.6;
+}

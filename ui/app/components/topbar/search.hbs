@@ -1,0 +1,48 @@
+<div class="topbar-search" data-test-topbar-search {{on "focusout" this.onFocusOut}}>
+  <Icon @name="search" class="topbar-search__icon" />
+  <input
+    id={{this.inputId}}
+    type="text"
+    class="topbar-search__input"
+    placeholder="Search pages and secrets engines"
+    autocomplete="off"
+    spellcheck="false"
+    aria-label="Search pages and secrets engines"
+    aria-expanded={{if this.isOpen "true" "false"}}
+    aria-controls="topbar-search-results"
+    aria-autocomplete="list"
+    value={{this.query}}
+    data-test-topbar-search-input
+    {{on "input" this.onInput}}
+    {{on "focus" this.open}}
+    {{on "keydown" this.onKeydown}}
+  />
+  <kbd class="topbar-search__hint" aria-hidden="true">{{this.shortcutLabel}}</kbd>
+  <ul
+    id="topbar-search-results"
+    role="listbox"
+    aria-label="Search results"
+    class="topbar-search__results {{unless this.isOpen 'is-hidden'}}"
+  >
+    {{#if this.isOpen}}
+      {{#each this.results as |result index|}}
+        <li
+          role="option"
+          tabindex="-1"
+          aria-selected={{if (eq index this.activeIndex) "true" "false"}}
+          class="topbar-search__result {{if (eq index this.activeIndex) 'is-active'}}"
+          data-test-topbar-search-result={{result.label}}
+          {{on "click" (fn this.go result)}}
+        >
+          <Icon @name={{result.icon}} role="presentation" />
+          <span class="topbar-search__label">{{result.label}}</span>
+          {{#if result.detail}}
+            <span class="topbar-search__detail">{{result.detail}}</span>
+          {{/if}}
+        </li>
+      {{else}}
+        <li role="option" aria-selected="false" aria-disabled="true" class="topbar-search__empty">No matches</li>
+      {{/each}}
+    {{/if}}
+  </ul>
+</div>
