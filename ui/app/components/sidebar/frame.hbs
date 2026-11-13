@@ -12,22 +12,22 @@
               data-test-sidebar-logo
             />
           </:logo>
-          <:actions>
-            <Hds::SideNav::Header::IconButton
-              class="sidebar-button"
-              @icon="terminal-screen"
-              @ariaLabel="Console toggle"
-              title="Console"
-              data-test-console-toggle
-              {{on "click" (fn (mut this.console.isOpen) (not this.console.isOpen))}}
-            />
-            <Sidebar::UserMenu />
-          </:actions>
         </Hds::SideNav::Header>
       </:header>
 
       {{! this block is where the Hds::SideNav::Portal components render into }}
       <:body>
+        {{#if this.currentCluster.cluster}}
+          <div class="sidebar-cluster-status hds-side-nav-hide-when-minimized" data-test-sidebar-cluster-status>
+            <span class="sidebar-cluster-status__name">{{this.currentCluster.cluster.name}}</span>
+            <span class="sidebar-cluster-status__state">
+              <span class="sidebar-cluster-status__dot {{if this.currentCluster.cluster.sealed 'is-sealed'}}"></span>
+              {{if this.currentCluster.cluster.sealed "Sealed" "Unsealed"}}
+              ·
+              {{if this.currentCluster.cluster.standby "Standby" "Active"}}
+            </span>
+          </div>
+        {{/if}}
         <Hds::SideNav::Portal::Target aria-label="sidebar navigation links" />
       </:body>
 
@@ -41,6 +41,33 @@
     </Hds::SideNav>
   </Frame.Sidebar>
   <Frame.Main id="app-main-content" class={{if this.console.isOpen "main--console-open"}}>
+    {{#if @showSidebar}}
+      <header class="app-topbar" data-test-topbar>
+        <Topbar::Search />
+        <div class="app-topbar__actions">
+          <a
+            class="hds-side-nav__icon-button sidebar-button"
+            href="https://openbao.org/docs/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Documentation"
+            title="Documentation"
+            data-test-topbar-docs
+          >
+            <Icon @name="help" />
+          </a>
+          <Hds::SideNav::Header::IconButton
+            class="sidebar-button"
+            @icon="terminal-screen"
+            @ariaLabel="Console toggle"
+            title="Console"
+            data-test-console-toggle
+            {{on "click" (fn (mut this.console.isOpen) (not this.console.isOpen))}}
+          />
+          <Sidebar::UserMenu />
+        </div>
+      </header>
+    {{/if}}
     {{! outlet for app content }}
     <div id="modal-wormhole"></div>
     {{yield}}

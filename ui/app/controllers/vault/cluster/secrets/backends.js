@@ -11,17 +11,45 @@ import { dropTask } from 'ember-concurrency';
 
 export default class VaultClusterSecretsBackendController extends Controller {
   @service flashMessages;
+  @service currentCluster;
 
   @tracked secretEngineOptions = [];
   @tracked selectedEngineType = null;
   @tracked selectedEngineName = null;
   @tracked showInternalEngines = false;
+  @tracked detailEngineId = null;
 
   #displayableBackendsCache = createCache(() =>
     this.model.filter((be) => be.shouldIncludeInList && (this.showInternalEngines || !be.isInternal))
   );
   get displayableBackends() {
     return getValue(this.#displayableBackendsCache);
+  }
+
+  get cluster() {
+    return this.currentCluster.cluster;
+  }
+
+  // number of distinct engine types among the listed engines, ex: [kv, kv, pki] => 2
+  get engineTypeCount() {
+    return new Set(this.displayableBackends.map((backend) => backend.engineType)).size;
+  }
+
+  // the engine shown in the detail panel; undefined when the panel is closed or the engine is no longer listed
+  get detailEngine() {
+    return this.detailEngineId
+      ? this.sortedDisplayableBackends.find((backend) => backend.id === this.detailEngineId)
+      : undefined;
+  }
+
+  @action
+  showDetails(backend) {
+    this.detailEngineId = this.detailEngineId === backend.id ? null : backend.id;
+  }
+
+  @action
+  closeDetails() {
+    this.detailEngineId = null;
   }
 
   @action

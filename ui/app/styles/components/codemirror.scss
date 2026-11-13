@@ -18,7 +18,7 @@ $serf: #dd4e58;
 $packer: #1ddba3;
 
 // Our colors
-$gray: color.adjust($black, $lightness: 89%, $space: hsl);
+$gray: color.adjust($pure-black, $lightness: 89%, $space: hsl);
 $red: #ff3d3d;
 $green: #39b54a;
 $dark-gray: #535f73;
@@ -26,10 +26,10 @@ $dark-gray: #535f73;
 $gutter-grey: #2a2f36;
 
 .CodeMirror-lint-tooltip {
-  background-color: #f9f9fa;
-  border: 1px solid $light-gray;
+  background-color: $ui-gray-100;
+  border: 1px solid $ui-gray-300;
   border-radius: 0;
-  color: color.adjust($black, $lightness: 13%, $space: hsl);
+  color: $ui-gray-900;
   font-family: $family-monospace;
   font-size: 13px;
   padding: 7px 8px 9px;
@@ -56,7 +56,7 @@ $gutter-grey: #2a2f36;
 
 .cm-s-hashi {
   &.CodeMirror {
-    background-color: $black !important;
+    background-color: $pure-black !important;
     resize: vertical;
     color: #cfd2d1 !important;
     border: none;

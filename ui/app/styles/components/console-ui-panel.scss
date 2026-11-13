@@ -6,7 +6,7 @@
 $console-close-height: 35px;
 
 .console-ui-panel {
-  background: var(--token-color-palette-neutral-700);
+  background: #0b0f10;
   width: -moz-available;
   width: -webkit-stretch;
   height: 0;
@@ -24,20 +24,20 @@ $console-close-height: 35px;
   .button {
     background: transparent;
     border: none;
-    color: $white;
+    color: $pure-white;
     min-width: 0;
     padding: 0 $size-8;
 
     &.active,
     &:hover {
       background: $blue;
-      color: $white;
+      color: $pure-white;
     }
   }
 }
 
 .console-ui-panel-content {
-  color: $white;
+  color: $pure-white;
   display: flex;
   flex-direction: column;
   font-size: 14px;
@@ -61,7 +61,7 @@ $console-close-height: 35px;
   }
 
   .cm-s-hashi.CodeMirror {
-    background-color: rgba($black, 0.5) !important;
+    background-color: rgba($pure-black, 0.5) !important;
     font-weight: $font-weight-normal;
     margin-left: $size-4;
     padding: $size-8 $size-4;
@@ -80,11 +80,11 @@ $console-close-height: 35px;
   display: flex;
 
   input {
-    background-color: rgba($black, 0.5);
-    border: 1px solid var(--token-color-palette-neutral-500);
+    background-color: rgba($pure-black, 0.5);
+    border: 1px solid $ui-gray-400;
     border-radius: 2px;
-    caret-color: $white;
-    color: $white;
+    caret-color: $pure-white;
+    color: $pure-white;
     flex: 1 1 auto;
     font-family: $family-monospace;
     font-size: 16px;

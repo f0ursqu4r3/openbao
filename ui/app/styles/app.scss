@@ -24,13 +24,68 @@
 @include font-face('text-security-square');
 
 :root {
-  /* Sidebar Foreground Colors */
+  color-scheme: dark;
+
+  /* Sidebar and top bar */
   --token-side-nav-color-foreground-primary: #ffffff; /* Primary text color */
   --token-side-nav-color-foreground-strong: #e0f0eb; /* Strong foreground (e.g., active items) */
-  --token-side-nav-color-foreground-faint: #9db7af; /* Faint foreground (e.g., secondary text) */
+  --token-side-nav-color-foreground-faint: #8aa39b; /* Faint foreground (e.g., secondary text) */
+  --token-side-nav-color-surface-primary: #0b0f10; /* Sidebar primary background */
+  --token-side-nav-color-surface-interactive-hover: #18261f; /* Hover state */
+  --token-side-nav-color-surface-interactive-active: #1d3a30; /* Active state */
 
-  /* Sidebar Background and Interactive Colors */
-  --token-side-nav-color-surface-primary: #336d5c; /* Sidebar primary background */
-  --token-side-nav-color-surface-interactive-hover: #4f8c77; /* Hover state */
-  --token-side-nav-color-surface-interactive-active: #275547; /* Active state */
+  /* HashiCorp Design System tokens, dark values */
+  --token-color-page-primary: #12171a;
+  --token-color-page-faint: #0f1416;
+  --token-color-surface-primary: #12171a;
+  --token-color-surface-faint: #151b1e;
+  --token-color-surface-strong: #1c2327;
+  --token-color-surface-interactive: #151b1e;
+  --token-color-surface-interactive-hover: #1c2327;
+  --token-color-surface-interactive-active: #262f34;
+  --token-color-surface-interactive-disabled: #151b1e;
+  --token-color-surface-action: #101d3a;
+  --token-color-surface-highlight: #21143a;
+  --token-color-surface-success: #10261a;
+  --token-color-surface-warning: #262006;
+  --token-color-surface-critical: #2a1316;
+  --token-color-foreground-strong: #eef1f3;
+  --token-color-foreground-primary: #d7dce0;
+  --token-color-foreground-faint: #a3adb3;
+  --token-color-foreground-disabled: #6b777e;
+  --token-color-foreground-action: #6fa2ff;
+  --token-color-foreground-action-hover: #9cbcff;
+  --token-color-foreground-action-active: #9cbcff;
+  --token-color-foreground-success: #3fca5c;
+  --token-color-foreground-success-on-surface: #8fe3a0;
+  --token-color-foreground-success-high-contrast: #d9f6de;
+  --token-color-foreground-warning: #fa9a4b;
+  --token-color-foreground-warning-on-surface: #fcc592;
+  --token-color-foreground-warning-high-contrast: #feead8;
+  --token-color-foreground-critical: #e5566a;
+  --token-color-foreground-critical-on-surface: #f3a1ab;
+  --token-color-foreground-critical-high-contrast: #fbdfe2;
+  --token-color-foreground-highlight: #c184ff;
+  --token-color-foreground-highlight-on-surface: #d2a8ff;
+  --token-color-foreground-highlight-high-contrast: #f0e0ff;
+  --token-color-border-primary: #a3adb333;
+  --token-color-border-faint: #a3adb31a;
+  --token-color-border-strong: #a3adb366;
+  --token-color-border-action: #1b3470;
+  --token-color-border-highlight: #4a2a78;
+  --token-color-border-success: #1c4a2a;
+  --token-color-border-warning: #54440a;
+  --token-color-border-critical: #5c2029;
+  --token-color-palette-neutral-0: #12171a;
+  --token-color-palette-neutral-50: #151b1e;
+  --token-color-palette-neutral-100: #1c2327;
+  --token-color-palette-neutral-200: #262f34;
+  --token-color-palette-neutral-300: #343f45;
+  --token-color-palette-neutral-400: #6b777e;
+  --token-color-palette-neutral-500: #a3adb3;
+  --token-color-palette-neutral-600: #d7dce0;
+  --token-color-palette-neutral-700: #eef1f3;
+  --token-color-palette-alpha-100: #a3adb31a;
+  --token-color-palette-alpha-200: #a3adb333;
+  --token-color-palette-alpha-300: #a3adb366;
 }

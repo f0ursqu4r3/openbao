@@ -1,2 +1,14 @@
-<Sidebar::Nav::Tools />
+<div class="tabs-container box is-sideless is-fullwidth is-paddingless is-marginless tools-tabs">
+  <nav class="tabs" aria-label="Tools">
+    <ul>
+      {{#each (tools-actions) as |supportedAction|}}
+        {{#if (has-permission "tools" routeParams=supportedAction)}}
+          <LinkTo @route="vault.cluster.tools.tool" @model={{supportedAction}} data-test-tools-tab={{supportedAction}}>
+            {{capitalize supportedAction}}
+          </LinkTo>
+        {{/if}}
+      {{/each}}
+    </ul>
+  </nav>
+</div>
 <ToolActionsForm @selectedAction={{this.selectedAction}} />

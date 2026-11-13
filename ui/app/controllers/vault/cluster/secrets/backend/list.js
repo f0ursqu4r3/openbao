@@ -104,6 +104,15 @@ export default Controller.extend({
 
   isConfigurableTab: or('isCertTab', 'isConfigure'),
 
+  // the folder tree shows for the engines that store secrets in folders
+  showFolderTree: computed('backendType', function () {
+    return ['kv', 'generic', 'cubbyhole'].includes(this.backendType);
+  }),
+
+  folderTreeModelType: computed('backendModel.modelTypeForKV', 'backendType', function () {
+    return this.backendType === 'cubbyhole' ? 'secret' : this.backendModel?.modelTypeForKV || 'secret';
+  }),
+
   backendCrumb: computed('backend', function () {
     const backend = this.backend;
 

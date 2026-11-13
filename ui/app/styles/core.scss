@@ -117,3 +117,6 @@
 @import './components/openbao-loading';
 @import './components/vlt-radio';
 @import './components/vlt-table';
+// app-page overrides page-header and toolbar, so it loads last
+@import './components/app-page';
+@import './components/dark-theme';

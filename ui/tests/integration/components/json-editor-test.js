@@ -74,7 +74,7 @@ module('Integration | Component | json-editor', function (hooks) {
     />`);
 
     assert.dom('.cm-s-hashi-read-only').hasStyle({
-      backgroundColor: 'rgb(247, 248, 250)',
+      backgroundColor: 'rgb(21, 27, 30)',
     });
     assert.dom('.CodeMirror-linenumber').doesNotExist('on readOnly does not show line numbers');
   });

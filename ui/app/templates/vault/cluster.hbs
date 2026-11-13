@@ -17,8 +17,8 @@
 </div>
 
 {{#if this.auth.isActiveSession}}
-  <section class="section">
-    <div class="container is-widescreen">
+  <section class="section app-page">
+    <div class="container is-widescreen app-page__content">
       <TokenExpireWarning @expirationDate={{this.auth.tokenExpirationDate}}>
         {{outlet}}
       </TokenExpireWarning>

@@ -34,7 +34,7 @@ module('Integration | Component | confirmation-modal', function (hooks) {
     assert.dom('[data-test-confirm-button]').hasText('Plz Continue', 'Confirm button has specified value');
     assert
       .dom('[data-test-modal-title]')
-      .hasStyle({ color: 'rgb(160, 125, 2)' }, 'title exists with warning header');
+      .hasStyle({ color: 'rgb(252, 221, 102)' }, 'title exists with warning header');
     await fillIn('[data-test-confirmation-modal-input="Confirmation Modal"]', 'Destructive Thing');
     assert.dom('[data-test-confirm-button="Confirmation Modal"]').isNotDisabled();
 

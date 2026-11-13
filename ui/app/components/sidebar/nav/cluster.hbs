@@ -1,49 +1,113 @@
 <Hds::SideNav::Portal @ariaLabel="Cluster Navigation Links" data-test-sidebar-nav-panel="Cluster" as |Nav|>
-  <Nav.Title data-test-sidebar-nav-heading="OpenBao">OpenBao</Nav.Title>
-
+  <Nav.Title data-test-sidebar-nav-heading="Secrets">Secrets</Nav.Title>
   <Nav.Link
     @route="vault.cluster.secrets"
     @current-when="vault.cluster.secrets vault.cluster.settings.mount-secret-backend vault.cluster.settings.configure-secret-backend"
     @text="Secrets engines"
+    @icon="key-values"
     data-test-sidebar-nav-link="Secrets engines"
   />
-  {{#if (has-permission "access")}}
+
+  {{#if (has-permission "access" routeParams=(array "methods" "mfa" "oidc"))}}
+    <Nav.Title data-test-sidebar-nav-heading="Authentication">Authentication</Nav.Title>
+  {{/if}}
+  {{#if (has-permission "access" routeParams="methods")}}
     <Nav.Link
-      @route={{get (route-params-for "access") "route"}}
-      @models={{get (route-params-for "access") "models"}}
-      @current-when="vault.cluster.access vault.cluster.settings.auth"
-      @text="Access"
-      @hasSubItems={{true}}
-      data-test-sidebar-nav-link="Access"
+      @route="vault.cluster.access.methods"
+      @current-when="vault.cluster.access.methods vault.cluster.access.method vault.cluster.settings.auth"
+      @text="Authentication methods"
+      @icon="user-check"
+      data-test-sidebar-nav-link="Authentication methods"
     />
   {{/if}}
-  {{#if (has-permission "policies")}}
+  {{#if (has-permission "access" routeParams="mfa")}}
+    <Nav.Link
+      @route="vault.cluster.access.mfa.methods"
+      @current-when="vault.cluster.access.mfa.methods vault.cluster.access.mfa.enforcements vault.cluster.access.mfa.index"
+      @text="Multi-factor authentication"
+      @icon="shield-check"
+      data-test-sidebar-nav-link="Multi-factor authentication"
+    />
+  {{/if}}
+  {{#if (has-permission "access" routeParams="oidc")}}
+    <Nav.Link
+      @route="vault.cluster.access.oidc"
+      @text="OIDC provider"
+      @icon="token"
+      data-test-sidebar-nav-link="OIDC provider"
+    />
+  {{/if}}
+
+  {{#if (has-permission "access" routeParams=(array "namespaces" "groups" "entities"))}}
+    <Nav.Title data-test-sidebar-nav-heading="Organization">Organization</Nav.Title>
+  {{/if}}
+  {{#if (has-permission "access" routeParams="namespaces")}}
+    <Nav.Link
+      @route="vault.cluster.access.namespaces"
+      @text="Namespaces"
+      @icon="org"
+      data-test-sidebar-nav-link="Namespaces"
+    />
+  {{/if}}
+  {{#if (has-permission "access" routeParams="groups")}}
+    <Nav.Link
+      @route="vault.cluster.access.identity"
+      @model="groups"
+      @text="Groups"
+      @icon="users"
+      data-test-sidebar-nav-link="Groups"
+    />
+  {{/if}}
+  {{#if (has-permission "access" routeParams="entities")}}
+    <Nav.Link
+      @route="vault.cluster.access.identity"
+      @model="entities"
+      @text="Entities"
+      @icon="identity-user"
+      data-test-sidebar-nav-link="Entities"
+    />
+  {{/if}}
+
+  {{#if (has-permission "policies" routeParams="acl")}}
+    <Nav.Title data-test-sidebar-nav-heading="Policies">Policies</Nav.Title>
     <Nav.Link
       @route="vault.cluster.policies"
-      @models={{get (route-params-for "policies") "models"}}
-      @text="Policies"
-      @hasSubItems={{true}}
-      data-test-sidebar-nav-link="Policies"
+      @model="acl"
+      @current-when="vault.cluster.policies vault.cluster.policy"
+      @text="ACL Policies"
+      @icon="file-text"
+      data-test-sidebar-nav-link="ACL Policies"
     />
+  {{/if}}
+
+  {{#if
+    (or
+      (has-permission "access" routeParams="leases")
+      (has-permission "tools")
+      (and this.namespace.inRootNamespace (has-permission "status" routeParams=(array "raft" "seal")))
+    )
+  }}
+    <Nav.Title data-test-sidebar-nav-heading="Operations">Operations</Nav.Title>
+  {{/if}}
+  {{#if (has-permission "access" routeParams="leases")}}
+    <Nav.Link @route="vault.cluster.access.leases" @text="Leases" @icon="clock" data-test-sidebar-nav-link="Leases" />
   {{/if}}
   {{#if (has-permission "tools")}}
     <Nav.Link
       @route="vault.cluster.tools.tool"
       @models={{get (route-params-for "tools") "models"}}
+      @current-when={{this.isToolsRoute}}
       @text="Tools"
-      @hasSubItems={{true}}
+      @icon="tools"
       data-test-sidebar-nav-link="Tools"
     />
-  {{/if}}
-
-  {{#if (and this.namespace.inRootNamespace (has-permission "status" routeParams=(array "raft" "seal")))}}
-    <Nav.Title data-test-sidebar-nav-heading="Monitoring">Monitoring</Nav.Title>
   {{/if}}
   {{#if (and this.cluster.usingRaft this.namespace.inRootNamespace (has-permission "status" routeParams="raft"))}}
     <Nav.Link
       @route="vault.cluster.storage"
       @model={{this.cluster.name}}
       @text="Raft Storage"
+      @icon="hard-drive"
       data-test-sidebar-nav-link="Raft Storage"
     />
   {{/if}}
@@ -52,6 +116,7 @@
       @route="vault.cluster.settings.seal"
       @model={{this.cluster.name}}
       @text="Seal OpenBao"
+      @icon="lock"
       data-test-sidebar-nav-link="Seal OpenBao"
     />
   {{/if}}

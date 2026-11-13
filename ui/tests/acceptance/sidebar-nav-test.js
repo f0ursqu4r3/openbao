@@ -27,43 +27,13 @@ module('Acceptance | sidebar navigation', function (hooks) {
     return authPage.login();
   });
 
-  test('it should link to correct routes at the cluster level', async function (assert) {
-    assert.expect(10);
-
+  test('it should show all links in one panel', async function (assert) {
     assert.dom(panel('Cluster')).exists('Cluster nav panel renders');
-
-    const subNavs = [
-      { label: 'Access', route: 'access' },
-      { label: 'Policies', route: 'policies/acl' },
-      { label: 'Tools', route: 'tools/wrap' },
-    ];
-
-    for (const subNav of subNavs) {
-      const { label, route } = subNav;
-      await click(link(label));
-      assert.strictEqual(currentURL(), `/vault/${route}`, `${label} route renders`);
-      assert.dom(panel(label)).exists(`${label} nav panel renders`);
-      await click(link('Back to main navigation'));
-    }
-
-    const links = [
-      { label: 'Raft Storage', route: '/vault/storage/raft' },
-      { label: 'Seal OpenBao', route: '/vault/settings/seal' },
-      { label: 'Secrets engines', route: '/vault/secrets' },
-    ];
-
-    for (const l of links) {
-      await click(link(l.label));
-      assert.strictEqual(currentURL(), l.route, `${l.label} route renders`);
-    }
+    assert.dom(link('Back to main navigation')).doesNotExist('There is no sub-panel back link');
+    assert.dom('[data-test-sidebar-nav-panel]').exists({ count: 1 }, 'Only one nav panel renders');
   });
 
-  test('it should link to correct routes at the access level', async function (assert) {
-    assert.expect(7);
-
-    await click(link('Access'));
-    assert.dom(panel('Access')).exists('Access nav panel renders');
-
+  test('it should link to correct routes', async function (assert) {
     const links = [
       { label: 'Multi-factor authentication', route: '/vault/access/mfa' },
       { label: 'OIDC provider', route: '/vault/access/oidc' },
@@ -71,7 +41,13 @@ module('Acceptance | sidebar navigation', function (hooks) {
       { label: 'Entities', route: '/vault/access/identity/entities' },
       { label: 'Leases', route: '/vault/access/leases/list' },
       { label: 'Authentication methods', route: '/vault/access' },
+      { label: 'ACL Policies', route: '/vault/policies/acl' },
+      { label: 'Tools', route: '/vault/tools/wrap' },
+      { label: 'Raft Storage', route: '/vault/storage/raft' },
+      { label: 'Seal OpenBao', route: '/vault/settings/seal' },
+      { label: 'Secrets engines', route: '/vault/secrets' },
     ];
+    assert.expect(links.length);
 
     for (const l of links) {
       await click(link(l.label));
@@ -79,44 +55,13 @@ module('Acceptance | sidebar navigation', function (hooks) {
     }
   });
 
-  test('it should link to correct routes at the policies level', async function (assert) {
-    assert.expect(2);
-
-    await click(link('Policies'));
-    assert.dom(panel('Policies')).exists('Access nav panel renders');
-
-    await click(link('ACL Policies'));
-    assert.strictEqual(currentURL(), '/vault/policies/acl', 'ACL Policies route renders');
-  });
-
-  test('it should link to correct routes at the tools level', async function (assert) {
-    assert.expect(7);
-
-    await click(link('Tools'));
-    assert.dom(panel('Tools')).exists('Access nav panel renders');
-
-    const links = [
-      { label: 'Wrap', route: '/vault/tools/wrap' },
-      { label: 'Lookup', route: '/vault/tools/lookup' },
-      { label: 'Unwrap', route: '/vault/tools/unwrap' },
-      { label: 'Rewrap', route: '/vault/tools/rewrap' },
-      { label: 'Random', route: '/vault/tools/random' },
-      { label: 'Hash', route: '/vault/tools/hash' },
-    ];
-
-    for (const l of links) {
-      await click(link(l.label));
-      assert.strictEqual(currentURL(), l.route, `${l.label} route renders`);
-    }
-  });
-
-  test('it should display access nav when mounting and configuring auth methods', async function (assert) {
-    await click(link('Access'));
+  test('it should keep the full nav when mounting and configuring auth methods', async function (assert) {
+    await click(link('Authentication methods'));
     await click('[data-test-auth-enable]');
-    assert.dom('[data-test-sidebar-nav-panel="Access"]').exists('Access nav panel renders');
+    assert.dom(link('Secrets engines')).exists('Full nav renders on the enable auth method page');
     await click(link('Authentication methods'));
     await click('[data-test-auth-backend-link="token"]');
     await click('[data-test-configure-link]');
-    assert.dom('[data-test-sidebar-nav-panel="Access"]').exists('Access nav panel renders');
+    assert.dom(link('Secrets engines')).exists('Full nav renders on the configure auth method page');
   });
 });

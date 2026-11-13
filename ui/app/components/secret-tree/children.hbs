@@ -1,0 +1,17 @@
+{{#if this.isLoading}}
+  <p class="secret-tree__note" data-test-secret-tree-loading>Loading…</p>
+{{else if this.folders.length}}
+  <ul class="secret-tree__list">
+    {{#each this.folders key="path" as |folder|}}
+      <SecretTree::Node
+        @backend={{@backend}}
+        @modelType={{@modelType}}
+        @path={{folder.path}}
+        @name={{folder.name}}
+        @currentPath={{@currentPath}}
+      />
+    {{/each}}
+  </ul>
+{{else if @isRoot}}
+  <p class="secret-tree__note" data-test-secret-tree-empty>No folders</p>
+{{/if}}

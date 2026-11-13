@@ -23,7 +23,7 @@
 
 .checkbox:hover,
 .radio:hover {
-  color: hsl(0, 0%, 21%);
+  color: $ui-gray-900;
 }
 
 .checkbox[disabled],

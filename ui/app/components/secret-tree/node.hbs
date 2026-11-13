@@ -1,0 +1,34 @@
+<li class="secret-tree__node">
+  <div class="secret-tree__row {{if this.isCurrent 'is-current'}}">
+    <button
+      type="button"
+      class="secret-tree__toggle"
+      aria-expanded={{if this.isOpen "true" "false"}}
+      aria-label="{{if this.isOpen 'Collapse' 'Expand'}} {{@name}}"
+      data-test-secret-tree-toggle={{@path}}
+      {{on "click" this.toggle}}
+    >
+      <Icon @name={{if this.isOpen "chevron-down" "chevron-right"}} />
+    </button>
+    <SecretLink
+      @mode="list"
+      @secret={{@path}}
+      @backend={{@backend}}
+      class="secret-tree__link"
+      aria-current={{if this.isCurrent "page"}}
+      data-test-secret-tree-link={{@path}}
+    >
+      <Icon @name="folder" />
+      <span class="secret-tree__name">{{@name}}</span>
+    </SecretLink>
+  </div>
+  {{#if this.isOpen}}
+    <SecretTree::Children
+      @backend={{@backend}}
+      @modelType={{@modelType}}
+      @path={{@path}}
+      @currentPath={{@currentPath}}
+      @isRoot={{@isRoot}}
+    />
+  {{/if}}
+</li>
