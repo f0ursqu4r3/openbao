@@ -1,63 +1,68 @@
-<PageHeader as |p|>
-  <p.levelLeft>
-    <h1 class="title is-3">
-      Namespaces
-    </h1>
-  </p.levelLeft>
+<PageHeader as |header|>
+  <header.levelLeft>
+    <div>
+      <h1 class="title is-3">
+        Namespaces
+      </h1>
+      <p class="page-subtitle">Isolate mounts, policies, and identities for each team or tenant.</p>
+    </div>
+  </header.levelLeft>
+  <header.levelRight>
+    <Hds::Button
+      @text="Create namespace"
+      @icon="plus"
+      @route="vault.cluster.access.namespaces.create"
+      data-test-namespace-create
+    />
+  </header.levelRight>
 </PageHeader>
 
-<Toolbar>
-  <ToolbarActions>
-    <ToolbarLink @route="vault.cluster.access.namespaces.create" @type="add">
-      Create namespace
-    </ToolbarLink>
-  </ToolbarActions>
-</Toolbar>
+<div class="list-card">
+  <ListView @items={{this.model}} @itemNoun="namespace" @paginationRouteName="vault.cluster.access.namespaces" as |list|>
+    {{#if list.empty}}
+      <list.empty>
+        <LinkTo @route="vault.cluster.access.namespaces.create">
+          Create Namespace
+        </LinkTo>
 
-<ListView @items={{this.model}} @itemNoun="namespace" @paginationRouteName="vault.cluster.access.namespaces" as |list|>
-  {{#if list.empty}}
-    <list.empty>
-      <LinkTo @route="vault.cluster.access.namespaces.create">
-        Create Namespace
-      </LinkTo>
-
-      <DocLink @path="/blog/namespaces-announcement/#how-to-use-namespaces">
-        Learn more
-      </DocLink>
-    </list.empty>
-  {{else}}
-    <ListItem as |Item|>
-      <Item.content>
-        {{list.item.id}}
-      </Item.content>
-      <Item.menu as |m|>
-        {{#let (concat this.currentNamespace (if this.currentNamespace "/") list.item.id) as |targetNamespace|}}
-          {{#if (includes targetNamespace this.accessibleNamespaces)}}
-            <li class="action">
-              <NamespaceLink @targetNamespace={{targetNamespace}} @unparsed={{true}} @class="is-block">
-                Switch to Namespace
-              </NamespaceLink>
-            </li>
-          {{/if}}
-        {{/let}}
-        <li class="action">
-          <m.Message
-            @id={{list.item.id}}
-            @confirmButtonText="Remove"
-            @message="Any engines or mounts in this namespace will also be removed."
-            @onConfirm={{action
-              (perform
-                Item.callMethod
-                "destroyRecord"
-                list.item
-                (concat "Successfully deleted namespace: " list.item.id)
-                "There was an error deleting this namespace: "
-                (action "refreshNamespaceList")
-              )
-            }}
-          />
-        </li>
-      </Item.menu>
-    </ListItem>
-  {{/if}}
-</ListView>
+        <DocLink @path="/blog/namespaces-announcement/#how-to-use-namespaces">
+          Learn more
+        </DocLink>
+      </list.empty>
+    {{else}}
+      <ListItem as |Item|>
+        <Item.content>
+          {{list.item.id}}
+        </Item.content>
+        <Item.menu as |m|>
+          {{#let (concat this.currentNamespace (if this.currentNamespace "/") list.item.id) as |targetNamespace|}}
+            {{#if (includes targetNamespace this.accessibleNamespaces)}}
+              <li class="action">
+                <NamespaceLink @targetNamespace={{targetNamespace}} @unparsed={{true}} @class="is-block">
+                  Switch to Namespace
+                </NamespaceLink>
+              </li>
+            {{/if}}
+          {{/let}}
+          <li class="action">
+            <m.Message
+              @id={{list.item.id}}
+              @confirmButtonText="Remove"
+              @message="Any engines or mounts in this namespace will also be removed."
+              @onConfirm={{action
+                (perform
+                  Item.callMethod
+                  "destroyRecord"
+                  list.item
+                  (concat "Successfully deleted namespace: " list.item.id)
+                  "There was an error deleting this namespace: "
+                  (action "refreshNamespaceList")
+                )
+              }}
+            />
+          </li>
+        </Item.menu>
+      </ListItem>
+    {{/if}}
+  </ListView>
+</div>

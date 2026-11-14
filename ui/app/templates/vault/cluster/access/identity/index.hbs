@@ -1,32 +1,41 @@
 <Identity::EntityNav @identityType={{this.identityType}} @model={{this.model}} />
 {{#if this.model.meta.total}}
-  {{#each this.model as |item|}}
-    <LinkedBlock
-      @params={{array "vault.cluster.access.identity.show" item.id "details"}}
-      class="list-item-row"
-      data-test-identity-row
-    >
-      <div class="columns is-mobile">
-        <div class="column is-7-tablet is-10-mobile">
-          <LinkTo
-            @route="vault.cluster.access.identity.show"
-            @models={{array item.id "details"}}
-            class="is-block has-text-black has-text-weight-semibold"
-            data-test-identity-link={{true}}
-          >
-            <Icon @name="user" class="has-text-grey-light" />
-            <span class="has-text-weight-semibold">{{item.name}}</span>
-          </LinkTo>
-          <div class="has-text-grey is-size-8">
-            {{item.id}}
-          </div>
-        </div>
-        <div class="column is-3 is-hidden-mobile">
+  <div class="engine-table engine-table--identity">
+    <div class="engine-table__head" aria-hidden="true">
+      <span>Name</span>
+      <span class="engine-table__optional">ID</span>
+      <span>Aliases</span>
+      <span></span>
+    </div>
+    {{#each this.model as |item|}}
+      <LinkedBlock
+        @params={{array "vault.cluster.access.identity.show" item.id "details"}}
+        class="list-item-row engine-table__row is-no-underline"
+        data-test-identity-row
+      >
+        <LinkTo
+          @route="vault.cluster.access.identity.show"
+          @models={{array item.id "details"}}
+          class="engine-table__path has-text-black has-text-weight-semibold"
+          data-test-identity-link={{true}}
+        >
+          <Icon @name="user" class="has-text-grey-light" />
+          <span class="has-text-weight-semibold">{{item.name}}</span>
+          {{#if item.disabled}}
+            <span class="tag">Disabled</span>
+          {{/if}}
+        </LinkTo>
+        <code class="engine-table__optional has-text-grey is-size-8">
+          {{item.id}}
+        </code>
+        <div class="has-text-grey">
           {{#if item.aliases.length}}
             {{pluralize item.aliases.length "alias"}}
+          {{else}}
+            None
           {{/if}}
         </div>
-        <div class="column has-text-right">
+        <div class="linkable-item-menu">
           <PopupMenu @name="identity-item" @onOpen={{action "reloadRecord" item}}>
             <Confirm as |c|>
               <nav class="menu">
@@ -88,9 +97,9 @@
             </Confirm>
           </PopupMenu>
         </div>
-      </div>
-    </LinkedBlock>
-  {{/each}}
+      </LinkedBlock>
+    {{/each}}
+  </div>
   {{#if (gt this.model.meta.lastPage 1)}}
     <ListPagination
       @page={{this.model.meta.currentPage}}

@@ -1,11 +1,22 @@
 {{#if (or (eq this.policyType "acl"))}}
-  <PageHeader as |p|>
-    <p.levelLeft>
-      <h1 class="title is-3">
-        {{uppercase this.policyType}}
-        Policies
-      </h1>
-    </p.levelLeft>
+  <PageHeader as |header|>
+    <header.levelLeft>
+      <div>
+        <h1 class="title is-3">
+          {{uppercase this.policyType}}
+          Policies
+        </h1>
+        <p class="page-subtitle">Define which paths a token can read, write, and manage.</p>
+      </div>
+    </header.levelLeft>
+    <header.levelRight>
+      <Hds::Button
+        @text="Create {{uppercase this.policyType}} policy"
+        @icon="plus"
+        @route="vault.cluster.policies.create"
+        data-test-policy-create-link
+      />
+    </header.levelRight>
   </PageHeader>
   <Toolbar>
     {{#if this.model.meta.total}}
@@ -38,49 +49,50 @@
         {{/if}}
       </ToolbarFilters>
     {{/if}}
-    <ToolbarActions>
-      <ToolbarLink @route="vault.cluster.policies.create" @type="add" data-test-policy-create-link>
-        Create
-        {{uppercase this.policyType}}
-        policy
-      </ToolbarLink>
-    </ToolbarActions>
   </Toolbar>
   {{#if this.model.meta.total}}
-    {{#each this.model as |item|}}
-      {{#if (eq item.id "root")}}
-        <div class="list-item-row is-flex" data-test-policy-item>
-          <Icon @name="file" class="has-text-grey-light" />
-          <div>
-            <span class="has-text-weight-semibold has-text-grey" data-test-policy-name>
-              {{item.id}}
-            </span>
-            <p class="help has-text-grey">
+    <div class="engine-table engine-table--policies">
+      <div class="engine-table__head" aria-hidden="true">
+        <span>Name</span>
+        <span>Notes</span>
+        <span></span>
+      </div>
+      {{#each this.model as |item|}}
+        {{#if (eq item.id "root")}}
+          <div class="list-item-row engine-table__row is-static" data-test-policy-item>
+            <div class="engine-table__path">
+              <Icon @name="file" class="has-text-grey-light" />
+              <span class="has-text-weight-semibold has-text-grey" data-test-policy-name>
+                {{item.id}}
+              </span>
+            </div>
+            <p class="has-text-grey">
               The
               <code>root</code>
               policy does not contain any rules but can do anything within OpenBao. It should be used with extreme care.
             </p>
           </div>
-        </div>
-      {{else}}
-        <LinkedBlock
-          @params={{array "vault.cluster.policy.show" this.policyType item.id}}
-          class="list-item-row"
-          data-test-policy-link={{item.id}}
-        >
-          <div class="columns is-mobile">
-            <div class="column is-10">
-              <LinkTo
-                @route="vault.cluster.policy.show"
-                @models={{array this.policyType item.id}}
-                class="has-text-black has-text-weight-semibold"
-                data-test-policy-item={{true}}
-              >
-                <Icon @name="file" class="has-text-grey-light" />
-                <span class="is-underline" data-test-policy-name>{{item.id}}</span>
-              </LinkTo>
+        {{else}}
+          <LinkedBlock
+            @params={{array "vault.cluster.policy.show" this.policyType item.id}}
+            class="list-item-row engine-table__row is-no-underline"
+            data-test-policy-link={{item.id}}
+          >
+            <LinkTo
+              @route="vault.cluster.policy.show"
+              @models={{array this.policyType item.id}}
+              class="engine-table__path has-text-black has-text-weight-semibold"
+              data-test-policy-item={{true}}
+            >
+              <Icon @name="file" class="has-text-grey-light" />
+              <span data-test-policy-name>{{item.id}}</span>
+            </LinkTo>
+            <div class="has-text-grey">
+              {{#if (eq item.id "default")}}
+                Attached to every token unless you exclude it.
+              {{/if}}
             </div>
-            <div class="column has-text-right">
+            <div class="linkable-item-menu">
               <PopupMenu name="policy-nav">
                 <Confirm as |c|>
                   <nav class="menu">
@@ -135,12 +147,12 @@
                 </Confirm>
               </PopupMenu>
             </div>
-          </div>
-        </LinkedBlock>
-      {{/if}}
-    {{else}}
-      <EmptyState @title="No policies matching &quot;{{this.pageFilter}}&quot;" />
-    {{/each}}
+          </LinkedBlock>
+        {{/if}}
+      {{else}}
+        <div class="engine-table__empty has-text-grey">No policies matching &quot;{{this.pageFilter}}&quot;</div>
+      {{/each}}
+    </div>
     {{#if (gt this.model.meta.lastPage 1)}}
       <ListPagination
         @page={{this.model.meta.currentPage}}
