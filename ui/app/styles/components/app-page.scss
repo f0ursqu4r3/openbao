@@ -184,6 +184,72 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   }
 }
 
+// Variants of the table for other lists. Each one sets its own column set.
+.engine-table--auth .engine-table__head,
+.app-page .engine-table--auth .engine-table__row {
+  grid-template-columns: minmax(160px, 1.2fr) 130px minmax(160px, 1fr) minmax(0, 2fr) 40px;
+
+  @include until(1200px) {
+    grid-template-columns: minmax(140px, 1fr) 130px 40px;
+  }
+}
+
+.engine-table--policies .engine-table__head,
+.app-page .engine-table--policies .engine-table__row {
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) 40px;
+}
+
+.engine-table--identity .engine-table__head,
+.app-page .engine-table--identity .engine-table__row {
+  grid-template-columns: minmax(180px, 1.2fr) minmax(0, 1.6fr) 120px 40px;
+
+  @include until(1200px) {
+    grid-template-columns: minmax(160px, 1fr) 120px 40px;
+  }
+}
+
+.engine-table--aliases .engine-table__head,
+.app-page .engine-table--aliases .engine-table__row {
+  grid-template-columns: minmax(180px, 1.2fr) minmax(0, 1.6fr) 130px minmax(0, 1fr) 40px;
+
+  @include until(1200px) {
+    grid-template-columns: minmax(160px, 1fr) 130px 40px;
+  }
+}
+
+// A plain list inside the table frame, for lists that the shared ListView renders.
+.list-card:has([data-test-list-view-list]) {
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+
+  > .box {
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .list-item-row:first-child {
+    border-radius: 7px 7px 0 0;
+  }
+
+  .list-item-row:last-child {
+    border-radius: 0 0 7px 7px;
+    box-shadow: none;
+  }
+}
+
+.page-header-actions {
+  display: flex;
+  gap: $spacing-xs;
+}
+
+.app-page .engine-table__row.is-static {
+  cursor: default;
+
+  &:hover {
+    background-color: transparent;
+  }
+}
+
 .engine-table__head {
   background-color: $ui-gray-050;
   border-radius: 7px 7px 0 0;
@@ -209,6 +275,7 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
 .engine-table__path {
   align-items: center;
   display: flex;
+  text-decoration: none;
   gap: $spacing-xs;
   min-width: 0;
 }
@@ -638,11 +705,108 @@ $engine-detail-width: 360px;
   margin: -34px $app-page-gutter 10px 0;
 }
 
-// Sign-in and other splash pages: a light gray page with the title centered above the white form.
+// Sign-in and other splash pages: one narrow card, centered, with the logo and title above it.
 .page-container:has(> .splash-page-container) {
   background-color: $ui-gray-050;
 }
 
-.splash-page-header .is-flex-row {
-  justify-content: center;
+.splash-page-container > .columns > .column {
+  flex: none;
+  max-width: 100%;
+  width: 420px;
+}
+
+.splash-page-header {
+  padding: 0 0 $spacing-l;
+  text-align: center;
+
+  .is-flex-row {
+    justify-content: center;
+  }
+
+  .has-bottom-margin-xxl {
+    margin-bottom: $spacing-m;
+  }
+
+  .brand-icon-large {
+    height: 56px;
+    width: 56px;
+  }
+
+  .title {
+    margin-bottom: 0;
+  }
+}
+
+// The namespace field is the top part of the card. The form is the bottom part.
+.splash-page-sub-header .toolbar-namespace-picker {
+  background-color: $white;
+  border: 1px solid $ui-gray-200;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  height: auto;
+  padding: $spacing-l $spacing-l 0;
+
+  &::after {
+    display: none;
+  }
+
+  .toolbar-scroller {
+    height: auto;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .field.is-horizontal {
+    display: block;
+  }
+
+  .field-label {
+    flex: none;
+    margin: 0 0 $spacing-xxs;
+    padding: 0;
+    text-align: left;
+  }
+
+  .is-label {
+    color: $black;
+  }
+}
+
+.splash-page-container .login-form {
+  background-color: $white;
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+  box-shadow: none;
+  overflow: hidden;
+
+  .auth-form,
+  .auth-form > .box {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .auth-form > .box {
+    padding: $spacing-l;
+  }
+
+  // the mount path and description block is empty for the token method
+  .auth-form .has-bottom-margin-s:not(:has(.is-label:not(:empty))) {
+    display: none;
+  }
+
+  #auth-submit {
+    margin-top: $spacing-xs;
+    min-height: 40px;
+    width: 100%;
+  }
+}
+
+.splash-page-sub-header:has(*) + .login-form {
+  border-radius: 0 0 8px 8px;
+  border-top: 0;
+}
+
+.splash-page-container .help {
+  text-align: center;
 }

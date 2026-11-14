@@ -1,9 +1,38 @@
-<PageHeader as |p|>
-  <p.levelLeft>
-    <h1 class="title is-3">
-      {{capitalize (pluralize this.identityType)}}
-    </h1>
-  </p.levelLeft>
+<PageHeader as |header|>
+  <header.levelLeft>
+    <div>
+      <h1 class="title is-3">
+        {{capitalize (pluralize this.identityType)}}
+      </h1>
+      <p class="page-subtitle">
+        {{#if (eq this.identityType "entity")}}
+          An entity is one user or machine. Aliases link it to its logins on each auth method.
+        {{else}}
+          A group collects entities and other groups so that they share policies.
+        {{/if}}
+      </p>
+    </div>
+  </header.levelLeft>
+  <header.levelRight>
+    <div class="page-header-actions">
+      {{#if (eq this.identityType "entity")}}
+        <Hds::Button
+          @text="Merge {{pluralize this.identityType}}"
+          @color="secondary"
+          @route="vault.cluster.access.identity.merge"
+          @model={{pluralize this.identityType}}
+          data-test-entity-merge-link={{true}}
+        />
+      {{/if}}
+      <Hds::Button
+        @text="Create {{this.identityType}}"
+        @icon="plus"
+        @route="vault.cluster.access.identity.create"
+        @model={{pluralize this.identityType}}
+        data-test-entity-create-link={{true}}
+      />
+    </div>
+  </header.levelRight>
 </PageHeader>
 <div class="tabs-container box is-sideless is-fullwidth is-paddingless is-marginless">
   <nav class="tabs">
@@ -17,31 +46,10 @@
     </ul>
   </nav>
 </div>
-<Toolbar>
-  {{#if this.model.meta.total}}
+{{#if this.model.meta.total}}
+  <Toolbar>
     <ToolbarFilters>
       <Identity::LookupInput @type={{this.identityType}} />
     </ToolbarFilters>
-  {{/if}}
-  <ToolbarActions>
-    {{#if (eq this.identityType "entity")}}
-      <ToolbarLink
-        @route="vault.cluster.access.identity.merge"
-        @model={{pluralize this.identityType}}
-        data-test-entity-merge-link={{true}}
-      >
-        Merge
-        {{pluralize this.identityType}}
-      </ToolbarLink>
-    {{/if}}
-    <ToolbarLink
-      @route="vault.cluster.access.identity.create"
-      @model={{pluralize this.identityType}}
-      @type="add"
-      data-test-entity-create-link={{true}}
-    >
-      Create
-      {{this.identityType}}
-    </ToolbarLink>
-  </ToolbarActions>
-</Toolbar>
+  </Toolbar>
+{{/if}}
