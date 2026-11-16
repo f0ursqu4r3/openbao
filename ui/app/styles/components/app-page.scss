@@ -122,8 +122,14 @@ html {
     min-width: 0;
   }
 
+  // the tab row scrolls by touch or trackpad; it does not draw a scrollbar under the tabs
   .tabs {
     overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   form {
@@ -579,6 +585,19 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   border-radius: 8px;
 }
 
+// Narrow windows: the label sits close above its value.
+@include until(640px) {
+  .app-page .info-table-row:not(.thead) {
+    padding-bottom: $spacing-xs;
+    padding-top: $spacing-xs;
+
+    > .column {
+      padding-bottom: $spacing-xxs;
+      padding-top: $spacing-xxs;
+    }
+  }
+}
+
 // The box that holds a card of rows has no lines of its own.
 .app-page .box:has(> .info-table-row) {
   box-shadow: none;
@@ -808,7 +827,9 @@ $app-topbar-height: 56px;
   padding: 0 $app-page-gutter;
   position: sticky;
   top: 0;
-  z-index: 20;
+  // Below the sidebar (z-index 20): on a narrow window the open sidebar and its close button
+  // must cover the top bar.
+  z-index: 5;
 
   @include until($mobile) {
     padding: 0 $spacing-m;
