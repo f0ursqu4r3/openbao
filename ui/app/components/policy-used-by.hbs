@@ -1,0 +1,53 @@
+<section class="access-view__section" data-test-policy-used-by>
+  <h2 class="title is-5">Used by</h2>
+  <p class="page-subtitle">
+    Entities and groups that have this policy attached. Auth method roles and tokens can also use the policy. They are not in
+    this list.
+  </p>
+  {{#if this.isLoading}}
+    <div class="engine-table engine-table__empty has-text-grey" data-test-used-by-loading>Loading…</div>
+  {{else if this.users.length}}
+    <div class="engine-table engine-table--access">
+      <div class="engine-table__head" aria-hidden="true">
+        <span>Name</span>
+        <span>Type</span>
+      </div>
+      {{#each this.users as |user|}}
+        <LinkedBlock
+          @params={{array "vault.cluster.access.identity.show" user.routeType user.id user.section}}
+          class="list-item-row engine-table__row is-no-underline"
+          data-test-used-by-row={{user.name}}
+        >
+          <LinkTo
+            @route="vault.cluster.access.identity.show"
+            @models={{array user.routeType user.id user.section}}
+            class="engine-table__path has-text-black has-text-weight-semibold"
+          >
+            <Icon @name={{if (eq user.type "group") "users" "user"}} class="has-text-grey-light" />
+            <span>{{user.name}}</span>
+          </LinkTo>
+          <div>
+            <span class="tag">{{if (eq user.type "group") "Group" "Entity"}}</span>
+          </div>
+        </LinkedBlock>
+      {{/each}}
+    </div>
+  {{else if this.isDenied}}
+    <div class="engine-table engine-table__empty has-text-grey" data-test-used-by-denied>
+      Your token cannot list entities or groups.
+    </div>
+  {{else}}
+    <div class="engine-table engine-table__empty has-text-grey" data-test-used-by-empty>
+      No entity or group has this policy attached.
+    </div>
+  {{/if}}
+  {{#if this.isTruncated}}
+    <p class="page-subtitle" data-test-used-by-truncated>
+      Only the first
+      {{this.limit}}
+      entities and the first
+      {{this.limit}}
+      groups were read, so the list can be incomplete.
+    </p>
+  {{/if}}
+</section>

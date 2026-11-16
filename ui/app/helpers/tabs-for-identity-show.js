@@ -6,7 +6,7 @@
 import { helper as buildHelper } from '@ember/component/helper';
 
 export const TABS = {
-  entity: ['details', 'aliases', 'policies', 'groups', 'metadata'],
+  entity: ['details', 'access', 'aliases', 'policies', 'groups', 'metadata'],
   'entity-alias': ['details', 'metadata'],
   //group will be used in the model hook of the route
   group: ['details', 'aliases', 'policies', 'members', 'parent-groups', 'metadata'],

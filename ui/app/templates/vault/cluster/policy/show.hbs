@@ -62,3 +62,6 @@
     </div>
   {{/if}}
 </div>
+{{#if (eq this.policyType "acl")}}
+  <PolicyUsedBy @policyName={{this.model.id}} />
+{{/if}}
