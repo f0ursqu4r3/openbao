@@ -1,44 +1,62 @@
 {{#if @model.hasMembers}}
-  {{#each @model.memberGroupIds as |gid|}}
-    <LinkedBlock @params={{array "vault.cluster.access.identity.show" "groups" gid this.details}} class="list-item-row">
-      <div class="columns is-mobile">
-        <div class="column is-10">
-          <LinkTo
-            @route="vault.cluster.access.identity.show"
-            @models={{array "groups" gid "details"}}
-            class="is-block has-text-black has-text-weight-semibold"
-          >
-            <Icon @name="folder" class="has-text-grey-light" />{{gid}}
-          </LinkTo>
+  <div class="engine-table engine-table--members">
+    <div class="engine-table__head" aria-hidden="true">
+      <span>Name</span>
+      <span>Type</span>
+      <span class="engine-table__optional">ID</span>
+      <span></span>
+    </div>
+    {{#each @model.memberGroupIds as |gid|}}
+      <LinkedBlock
+        @params={{array "vault.cluster.access.identity.show" "groups" gid "details"}}
+        class="list-item-row engine-table__row is-no-underline"
+        data-test-member-row={{gid}}
+      >
+        <LinkTo
+          @route="vault.cluster.access.identity.show"
+          @models={{array "groups" gid "details"}}
+          class="engine-table__path has-text-black has-text-weight-semibold"
+        >
+          <Icon @name="users" class="has-text-grey-light" />
+          <Identity::Name @type="group" @id={{gid}} />
+        </LinkTo>
+        <div>
+          <span class="tag">Group</span>
         </div>
-        <div class="column has-text-right">
+        <code class="engine-table__optional has-text-grey is-size-8">{{gid}}</code>
+        <div class="linkable-item-menu">
           {{#if @model.canEdit}}
             <Identity::PopupMembers @params={{array @model "memberGroupIds" gid}} />
           {{/if}}
         </div>
-      </div>
-    </LinkedBlock>
-  {{/each}}
-  {{#each @model.memberEntityIds as |gid|}}
-    <LinkedBlock @params={{array "vault.cluster.access.identity.show" "groups" gid this.details}} class="list-item-row">
-      <div class="columns">
-        <div class="column is-10">
-          <LinkTo
-            @route="vault.cluster.access.identity.show"
-            @models={{array "entities" gid "details"}}
-            class="is-block has-text-black has-text-weight-semibold"
-          >
-            <Icon @name="user" class="has-text-grey-light" />{{gid}}
-          </LinkTo>
+      </LinkedBlock>
+    {{/each}}
+    {{#each @model.memberEntityIds as |eid|}}
+      <LinkedBlock
+        @params={{array "vault.cluster.access.identity.show" "entities" eid "details"}}
+        class="list-item-row engine-table__row is-no-underline"
+        data-test-member-row={{eid}}
+      >
+        <LinkTo
+          @route="vault.cluster.access.identity.show"
+          @models={{array "entities" eid "details"}}
+          class="engine-table__path has-text-black has-text-weight-semibold"
+        >
+          <Icon @name="user" class="has-text-grey-light" />
+          <Identity::Name @type="entity" @id={{eid}} />
+        </LinkTo>
+        <div>
+          <span class="tag">Entity</span>
         </div>
-        <div class="column has-text-right">
+        <code class="engine-table__optional has-text-grey is-size-8">{{eid}}</code>
+        <div class="linkable-item-menu">
           {{#if @model.canEdit}}
-            <Identity::PopupMembers @params={{array @model "memberEntityIds" gid}} />
+            <Identity::PopupMembers @params={{array @model "memberEntityIds" eid}} />
           {{/if}}
         </div>
-      </div>
-    </LinkedBlock>
-  {{/each}}
+      </LinkedBlock>
+    {{/each}}
+  </div>
 {{else}}
   <EmptyState @title="No members in this group yet" />
 {{/if}}

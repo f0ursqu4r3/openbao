@@ -1,21 +1,33 @@
 {{#if @model.parentGroupIds.length}}
-  {{#each @model.parentGroupIds as |gid|}}
-    <LinkedBlock @params={{array "vault.cluster.access.identity.show" "groups" gid this.details}} class="list-item-row">
-      <div class="columns is-mobile">
-        <div class="column is-10">
-          <LinkTo
-            @route="vault.cluster.access.identity.show"
-            @models={{array "groups" gid "details"}}
-            class="is-block has-text-black has-text-weight-semibold"
-          >
-            <Icon @name="folder" class="has-text-grey-light" />{{gid}}
-          </LinkTo>
+  <div class="engine-table engine-table--members">
+    <div class="engine-table__head" aria-hidden="true">
+      <span>Name</span>
+      <span>Type</span>
+      <span class="engine-table__optional">ID</span>
+      <span></span>
+    </div>
+    {{#each @model.parentGroupIds as |gid|}}
+      <LinkedBlock
+        @params={{array "vault.cluster.access.identity.show" "groups" gid "details"}}
+        class="list-item-row engine-table__row is-no-underline"
+        data-test-parent-group-row={{gid}}
+      >
+        <LinkTo
+          @route="vault.cluster.access.identity.show"
+          @models={{array "groups" gid "details"}}
+          class="engine-table__path has-text-black has-text-weight-semibold"
+        >
+          <Icon @name="users" class="has-text-grey-light" />
+          <Identity::Name @type="group" @id={{gid}} />
+        </LinkTo>
+        <div>
+          <span class="tag">Group</span>
         </div>
-        <div class="column has-text-right">
-        </div>
-      </div>
-    </LinkedBlock>
-  {{/each}}
+        <code class="engine-table__optional has-text-grey is-size-8">{{gid}}</code>
+        <div></div>
+      </LinkedBlock>
+    {{/each}}
+  </div>
 {{else}}
   <EmptyState @title="This group has no parent groups yet" />
 {{/if}}
