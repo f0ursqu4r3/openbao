@@ -88,6 +88,44 @@ html {
     padding: 0;
   }
 
+  // On a narrow window the filters and actions wrap to more rows. They do not scroll sideways.
+  @include until(769px) {
+    .toolbar-scroller {
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+      height: auto;
+      min-height: 52px;
+      overflow-x: visible;
+      padding: $spacing-xs 0;
+    }
+
+    .toolbar-filters,
+    .toolbar-actions {
+      flex-wrap: wrap;
+      gap: $spacing-xs;
+      max-width: 100%;
+    }
+
+    .toolbar-filters > *,
+    .toolbar-filters form > .field {
+      flex-wrap: wrap;
+      margin: 0;
+      max-width: 100%;
+      padding-left: 0;
+    }
+  }
+
+  // A tab row wider than the window scrolls inside its own box.
+  .tabs-container,
+  .tabs {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .tabs {
+    overflow-x: auto;
+  }
+
   form {
     max-width: $app-page-reading-width;
   }
@@ -233,6 +271,58 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
 
   @include until(1200px) {
     grid-template-columns: minmax(160px, 1fr) 130px 40px;
+  }
+}
+
+// Narrow windows: a row shows the name, its tags, and its buttons. The column header and the
+// plain text columns are hidden, because the columns cannot line up at this width.
+@include until(640px) {
+  .engine-table__head {
+    display: none;
+  }
+
+  .app-page .engine-table .engine-table__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+
+    > * {
+      display: none;
+    }
+
+    > :first-child {
+      display: flex;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    > :has(> .tag),
+    > .linkable-item-menu {
+      display: block;
+      flex: none;
+      max-width: 100%;
+    }
+
+    > .engine-table__detail-button {
+      display: inline-flex;
+      flex: none;
+    }
+
+    > .access-view__sources {
+      display: flex;
+      flex: 1 1 100%;
+    }
+  }
+
+  .engine-table__path > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .engine-table:first-of-type .engine-table__row:first-of-type,
+  .engine-table__head + .engine-table__row {
+    border-radius: 7px 7px 0 0;
   }
 }
 
