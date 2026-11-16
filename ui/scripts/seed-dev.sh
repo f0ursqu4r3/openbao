@@ -79,7 +79,10 @@ api POST transit/keys/signing '{"type":"ed25519"}' >/dev/null
 api POST transit/keys/app-data/rotate >/dev/null
 
 step "PKI root and role"
-api POST pki/root/generate/internal '{"common_name":"Example Internal Root CA","ttl":"87600h"}' >/dev/null 2>&1 || true
+# a second run must not add a second root CA
+if ! api LIST pki/issuers >/dev/null 2>&1; then
+  api POST pki/root/generate/internal '{"common_name":"Example Internal Root CA","ttl":"87600h"}' >/dev/null
+fi
 api POST pki/roles/internal-services '{"allowed_domains":"example.internal","allow_subdomains":true,"max_ttl":"720h"}' >/dev/null
 
 # ---------------------------------------------------------------- policies
