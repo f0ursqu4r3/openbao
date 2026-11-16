@@ -574,6 +574,80 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   }
 }
 
+// Forms: a form made of a field box and an action row is one card. The fields sit on the card
+// surface, so the inputs use the darker page color to stay visible.
+.app-page form:has(> .box.is-fullwidth) {
+  background-color: $ui-gray-050;
+  border: 1px solid $ui-gray-200;
+  border-radius: 8px;
+  padding: 0 $spacing-l;
+
+  > .box {
+    background-color: transparent;
+    box-shadow: none;
+    margin: 0;
+    padding: $spacing-l 0;
+  }
+
+  // the action row: a line above it, buttons at the left
+  > .field.is-grouped.box,
+  > .box:last-child:has(> .control > .button) {
+    border-top: 1px solid $ui-gray-200;
+    padding: $spacing-m 0;
+  }
+
+  .form-section {
+    border-top: 1px solid $ui-gray-200;
+    box-shadow: none;
+    margin-top: $spacing-l;
+    padding-top: $spacing-l;
+
+    > .title,
+    > label.title {
+      font-size: $size-6;
+      margin-bottom: $spacing-s;
+    }
+  }
+
+  .input,
+  .textarea,
+  .select select,
+  .ember-power-select-trigger {
+    background-color: $white;
+  }
+}
+
+// A box that only holds a form card has no lines or padding of its own.
+.app-page .box.is-fullwidth:has(> form) {
+  box-shadow: none;
+  padding: 0;
+}
+
+// Inputs on every page: one height, a rounder corner, and a clear focus ring.
+.app-page .input,
+.app-page .select select,
+.app-page .ember-power-select-trigger {
+  border-radius: 6px;
+  min-height: 36px;
+}
+
+.app-page .textarea {
+  border-radius: 6px;
+}
+
+.app-page .input:focus,
+.app-page .textarea:focus,
+.app-page .select select:focus {
+  border-color: $blue-500;
+  box-shadow: 0 0 0 2px rgba($blue-500, 0.35);
+  outline: none;
+}
+
+.app-page .field > .is-label,
+.app-page .field > label.is-label {
+  margin-bottom: $spacing-xxs;
+}
+
 // A light panel for images that were drawn for a light page.
 .diagram-panel {
   background-color: #eef1f3;
