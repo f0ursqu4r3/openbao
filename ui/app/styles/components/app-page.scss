@@ -326,24 +326,68 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   }
 }
 
-// A plain list inside the table frame, for lists that the shared ListView renders.
-.list-card:has([data-test-list-view-list]) {
+// Plain lists: a run of list rows outside a table is one bordered card. The rows are siblings, so
+// the first and last row of a run are found with sibling selectors, written in full.
+.app-page .list-item-row:not(.engine-table__row) {
+  background-color: $ui-gray-050;
   border: 1px solid $ui-gray-200;
+  border-top: 0;
+  box-shadow: none;
+  padding: $spacing-s $spacing-m;
+}
+
+.app-page a.list-item-row:not(.engine-table__row),
+.app-page .linked-block.list-item-row:not(.engine-table__row) {
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: $ui-gray-100;
+    box-shadow: none;
+    padding: $spacing-s $spacing-m;
+  }
+}
+
+.app-page .list-item-row:not(.engine-table__row):first-child,
+.app-page :not(.list-item-row) + .list-item-row:not(.engine-table__row) {
+  border-radius: 8px 8px 0 0;
+  border-top: 1px solid $ui-gray-200;
+}
+
+.app-page .list-item-row:not(.engine-table__row):last-child,
+.app-page .list-item-row:not(.engine-table__row):has(+ :not(.list-item-row)) {
+  border-radius: 0 0 8px 8px;
+}
+
+.app-page .list-item-row:not(.engine-table__row):first-child:last-child,
+.app-page :not(.list-item-row) + .list-item-row:not(.engine-table__row):last-child,
+.app-page :not(.list-item-row) + .list-item-row:not(.engine-table__row):has(+ :not(.list-item-row)) {
   border-radius: 8px;
+}
 
-  > .box {
-    box-shadow: none;
-    margin: 0;
+// Long content in a list row wraps. It does not push the page wider than the window.
+.app-page .list-item-row {
+  .level-left {
+    flex-shrink: 1;
+    min-width: 0;
   }
 
-  .list-item-row:first-child {
-    border-radius: 7px 7px 0 0;
+  .is-flex-row {
+    flex-wrap: wrap;
+    row-gap: $spacing-xxs;
   }
 
-  .list-item-row:last-child {
-    border-radius: 0 0 7px 7px;
-    box-shadow: none;
+  .tag {
+    height: auto;
+    max-width: 100%;
+    min-height: 1.5em;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
+}
+
+// The box that the shared ListView puts around its rows has no lines of its own.
+.app-page [data-test-list-view-list] {
+  box-shadow: none;
 }
 
 .page-header-actions {
