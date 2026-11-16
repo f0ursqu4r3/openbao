@@ -1,31 +1,38 @@
-<PageHeader as |p|>
-  <p.levelLeft>
-    <h1 class="title is-3">
-      Seal OpenBao
-    </h1>
-  </p.levelLeft>
+<PageHeader as |header|>
+  <header.levelLeft>
+    <div>
+      <h1 class="title is-3">
+        Seal OpenBao
+      </h1>
+      <p class="page-subtitle">Stop this OpenBao instance from answering requests until it is unsealed again.</p>
+    </div>
+  </header.levelLeft>
 </PageHeader>
 
 {{#if this.model.seal.canUpdate}}
-  <div class="box is-sideless is-fullwidth is-marginless">
-    <p>
-      Sealing an OpenBao instance tells the OpenBao server to stop responding to any access operations until it is unsealed
-      again. A sealed instance throws away its root key to unlock the data, so it physically is blocked from responding to
-      operations again until OpenBao is unsealed again with the "unseal" command or via the API.
-    </p>
-  </div>
-  <div class="field is-grouped box is-fullwidth is-bottomless">
-    <ConfirmAction
-      @buttonClasses="button is-primary"
-      @confirmTitle="Seal this cluster?"
-      @confirmMessage="You will not be able to read or write any data until the cluster is unsealed again."
-      @confirmButtonText="Seal"
-      @horizontalPosition="auto-left"
-      @onConfirmAction={{action "seal"}}
-      data-test-seal="true"
-    >
-      Seal
-    </ConfirmAction>
+  <div class="danger-panel">
+    <Icon @name="alert-triangle" @size="24" class="danger-panel__icon" />
+    <div class="danger-panel__body">
+      <h2 class="title is-6">Sealing stops all access</h2>
+      <p>
+        Sealing an OpenBao instance tells the OpenBao server to stop responding to any access operations until it is unsealed
+        again. A sealed instance throws away its root key to unlock the data, so it physically is blocked from responding to
+        operations again until OpenBao is unsealed again with the "unseal" command or via the API.
+      </p>
+      <div class="danger-panel__actions">
+        <ConfirmAction
+          @buttonClasses="button is-danger"
+          @confirmTitle="Seal this cluster?"
+          @confirmMessage="You will not be able to read or write any data until the cluster is unsealed again."
+          @confirmButtonText="Seal"
+          @horizontalPosition="auto-right"
+          @onConfirmAction={{action "seal"}}
+          data-test-seal="true"
+        >
+          Seal
+        </ConfirmAction>
+      </div>
+    </div>
   </div>
 {{else}}
   <EmptyState @title="This token does not have sufficient capabilities to seal this OpenBao instance" />
