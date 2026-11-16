@@ -351,6 +351,15 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   gap: $spacing-xs;
 }
 
+.engine-table--members .engine-table__head,
+.app-page .engine-table--members .engine-table__row {
+  grid-template-columns: minmax(180px, 1.2fr) 120px minmax(0, 1.6fr) 40px;
+
+  @include until(1200px) {
+    grid-template-columns: minmax(160px, 1fr) 120px 40px;
+  }
+}
+
 .engine-table--access .engine-table__head,
 .app-page .engine-table--access .engine-table__row {
   grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr);
@@ -468,6 +477,101 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   box-shadow: none;
   margin-top: $spacing-l;
   padding-left: 0;
+}
+
+// Detail rows: a run of label and value rows is one bordered card. The rows are siblings with no
+// wrapper of their own, so the first and last row of a run are found with sibling selectors.
+.app-page .info-table-row:not(.thead) {
+  background-color: $ui-gray-050;
+  border: 1px solid $ui-gray-200;
+  border-top: 0;
+  box-shadow: none;
+  padding: 0 $spacing-m;
+
+  .column {
+    padding-bottom: $spacing-s;
+    padding-top: $spacing-s;
+  }
+
+  > .column:first-child {
+    flex: none;
+    width: 240px;
+
+    @include until(640px) {
+      width: auto;
+    }
+  }
+
+  .is-label:not(.helper-text) {
+    color: $ui-gray-600 !important;
+    font-size: $size-8;
+    font-weight: $font-weight-semibold;
+  }
+
+  > .column:last-child {
+    color: $black;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+// First and last row of a run. The selectors are written in full: nesting them with "&" would test
+// the sibling of .app-page, not the sibling of the row.
+.app-page .info-table-row:not(.thead):first-child,
+.app-page :not(.info-table-row) + .info-table-row:not(.thead),
+.app-page .info-table-row.thead + .info-table-row {
+  border-radius: 8px 8px 0 0;
+  border-top: 1px solid $ui-gray-200;
+}
+
+.app-page .info-table-row:not(.thead):last-child,
+.app-page .info-table-row:not(.thead):has(+ :not(.info-table-row)) {
+  border-radius: 0 0 8px 8px;
+}
+
+.app-page .info-table-row:not(.thead):first-child:last-child,
+.app-page :not(.info-table-row) + .info-table-row:not(.thead):last-child,
+.app-page :not(.info-table-row) + .info-table-row:not(.thead):has(+ :not(.info-table-row)) {
+  border-radius: 8px;
+}
+
+// The box that holds a card of rows has no lines of its own.
+.app-page .box:has(> .info-table-row) {
+  box-shadow: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+// Toolbar actions are outlined buttons.
+.app-page .toolbar-actions {
+  gap: $spacing-xs;
+}
+
+// The header row above a card uses the same columns as the card rows.
+.app-page .info-table-row.thead {
+  box-shadow: none;
+  padding: 0 $spacing-m;
+
+  > .column:first-child {
+    flex: none;
+    padding-left: 0;
+    width: 240px;
+  }
+}
+
+.app-page .toolbar-link {
+  align-items: center;
+  border: 1px solid $ui-gray-300;
+  display: inline-flex;
+  line-height: 1;
+  border-radius: 6px;
+  font-size: $size-8;
+  height: 32px;
+  padding: 0 $spacing-s;
+
+  &:hover:not(.disabled) {
+    border: 1px solid $ui-gray-500;
+  }
 }
 
 // A light panel for images that were drawn for a light page.

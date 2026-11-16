@@ -1,17 +1,54 @@
 {{#if @model.groupIds}}
-  {{#each @model.directGroupIds as |gid|}}
-    <LinkTo @route="vault.cluster.access.identity.show" @models={{array "groups" gid "details"}} class="list-item-row">
-      <Icon @name="folder" class="has-text-grey-light" />{{gid}}
-    </LinkTo>
-  {{/each}}
-  {{#each @model.inheritedGroupIds as |gid|}}
-    <LinkedBlock @params={{array "vault.cluster.access.identity.show" "groups" gid "details"}} class="list-item-row">
-      <LinkTo @route="vault.cluster.access.identity.show" @models={{array "groups" gid "details"}} class="has-text-black">
-        <Icon @name="folder" class="has-text-grey-light" />{{gid}}
-      </LinkTo>
-      <span class="tag has-text-grey is-size-8">inherited</span>
-    </LinkedBlock>
-  {{/each}}
+  <div class="engine-table engine-table--members">
+    <div class="engine-table__head" aria-hidden="true">
+      <span>Name</span>
+      <span>Membership</span>
+      <span class="engine-table__optional">ID</span>
+      <span></span>
+    </div>
+    {{#each @model.directGroupIds as |gid|}}
+      <LinkedBlock
+        @params={{array "vault.cluster.access.identity.show" "groups" gid "details"}}
+        class="list-item-row engine-table__row is-no-underline"
+        data-test-group-row={{gid}}
+      >
+        <LinkTo
+          @route="vault.cluster.access.identity.show"
+          @models={{array "groups" gid "details"}}
+          class="engine-table__path has-text-black has-text-weight-semibold"
+        >
+          <Icon @name="users" class="has-text-grey-light" />
+          <Identity::Name @type="group" @id={{gid}} />
+        </LinkTo>
+        <div>
+          <span class="tag">Direct</span>
+        </div>
+        <code class="engine-table__optional has-text-grey is-size-8">{{gid}}</code>
+        <div></div>
+      </LinkedBlock>
+    {{/each}}
+    {{#each @model.inheritedGroupIds as |gid|}}
+      <LinkedBlock
+        @params={{array "vault.cluster.access.identity.show" "groups" gid "details"}}
+        class="list-item-row engine-table__row is-no-underline"
+        data-test-group-row={{gid}}
+      >
+        <LinkTo
+          @route="vault.cluster.access.identity.show"
+          @models={{array "groups" gid "details"}}
+          class="engine-table__path has-text-black has-text-weight-semibold"
+        >
+          <Icon @name="users" class="has-text-grey-light" />
+          <Identity::Name @type="group" @id={{gid}} />
+        </LinkTo>
+        <div>
+          <span class="tag">Inherited</span>
+        </div>
+        <code class="engine-table__optional has-text-grey is-size-8">{{gid}}</code>
+        <div></div>
+      </LinkedBlock>
+    {{/each}}
+  </div>
 {{else}}
   <EmptyState @title="{{@model.name}} is not a member of any groups." />
 {{/if}}
