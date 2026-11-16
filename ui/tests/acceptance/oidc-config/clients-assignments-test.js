@@ -63,17 +63,21 @@ module('Acceptance | oidc-config clients and assignments', function (hooks) {
   });
 
   test('it renders empty state when no clients are configured', async function (assert) {
-    assert.expect(5);
+    assert.expect(6);
     this.server.get('/identity/oidc/client', () => overrideMirageResponse(404));
 
     await visit(OIDC_BASE_URL);
     assert.strictEqual(currentURL(), '/vault/access/oidc');
     assert.dom('h1.title.is-3').hasText('OIDC Provider');
-    assert.dom(SELECTORS.oidcHeader).hasText(
-      `Configure OpenBao to act as an OIDC identity provider, and offer OpenBao’s various authentication
-    methods and source of identity to any client applications. Create your first app`,
-      'renders call to action header when no clients are configured'
-    );
+    assert
+      .dom(SELECTORS.oidcHeader)
+      .includesText(
+        'Configure OpenBao to act as an OIDC identity provider',
+        'renders the header text when no clients are configured'
+      );
+    assert
+      .dom(SELECTORS.oidcClientCreateButton)
+      .hasText('Create your first app', 'renders call to action button when no clients are configured');
     assert.dom('[data-test-oidc-landing]').exists('landing page renders when no clients are configured');
     assert
       .dom(SELECTORS.oidcLandingImg)

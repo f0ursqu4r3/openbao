@@ -1,14 +1,21 @@
-<div class="box is-fullwidth is-shadowless" data-test-oidc-landing>
-  <p>
-    <b>Step 1:</b>
-    Create an application, and obtain the client ID, client secret and issuer URL.
-  </p>
-  <p>
-    <b>Step 2:</b>
-    Set up a new auth method for OpenBao with the client application.
-  </p>
+<div class="stat-cards" data-test-oidc-landing>
+  <div class="stat-card">
+    <Icon @name="key" @size="24" class="stat-card__icon" />
+    <div>
+      <div class="stat-card__label">Step 1</div>
+      <p>Create an application, and obtain the client ID, client secret and issuer URL.</p>
+    </div>
+  </div>
+  <div class="stat-card">
+    <Icon @name="user-check" @size="24" class="stat-card__icon" />
+    <div>
+      <div class="stat-card__label">Step 2</div>
+      <p>Set up a new auth method for OpenBao with the client application.</p>
+    </div>
+  </div>
 </div>
 
-<div class="box is-fullwidth is-shadowless">
+{{! the diagram is an image with dark text on a transparent background, so it needs a light panel }}
+<div class="diagram-panel">
   <img data-test-oidc-img src={{img-path "~/oidc-landing.png"}} alt="OIDC configure diagram" />
 </div>
