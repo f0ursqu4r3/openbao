@@ -242,6 +242,45 @@ $engine-table-columns-narrow: minmax(140px, 1fr) 130px 150px 32px 40px;
   gap: $spacing-xs;
 }
 
+.engine-table--access .engine-table__head,
+.app-page .engine-table--access .engine-table__row {
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr);
+}
+
+.engine-table--access-groups .engine-table__head,
+.app-page .engine-table--access-groups .engine-table__row {
+  grid-template-columns: minmax(180px, 1fr) minmax(120px, 1fr) minmax(0, 1.5fr);
+}
+
+// Access views: stacked sections, each with a heading, a short note, and a table.
+.access-view__section {
+  margin-top: $spacing-l;
+
+  > .title {
+    margin-bottom: $spacing-xxs;
+  }
+
+  > .page-subtitle {
+    margin-bottom: $spacing-s;
+    max-width: 880px;
+  }
+
+  > .title + .engine-table {
+    margin-top: $spacing-s;
+  }
+}
+
+.access-view__sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xxs;
+
+  a.tag {
+    gap: $spacing-xxs;
+    text-decoration: none;
+  }
+}
+
 .app-page .engine-table__row.is-static {
   cursor: default;
 

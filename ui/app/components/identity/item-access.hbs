@@ -1,0 +1,147 @@
+<div class="access-view" data-test-identity-access>
+  <section class="access-view__section">
+    <h2 class="title is-5">Effective policies</h2>
+    <p class="page-subtitle">
+      Policies that apply to
+      {{@model.name}}
+      directly or through a group. A login also adds the policies of its auth method role, and the
+      <code>default</code>
+      policy unless the role excludes it.
+    </p>
+    {{#if this.isLoading}}
+      <div class="engine-table__empty has-text-grey" data-test-access-loading>Loading…</div>
+    {{else if this.policies.length}}
+      <div class="engine-table engine-table--access">
+        <div class="engine-table__head" aria-hidden="true">
+          <span>Policy</span>
+          <span>Source</span>
+        </div>
+        {{#each this.policies as |policy|}}
+          <LinkedBlock
+            @params={{array "vault.cluster.policy.show" "acl" policy.name}}
+            class="list-item-row engine-table__row is-no-underline"
+            data-test-access-policy={{policy.name}}
+          >
+            <LinkTo
+              @route="vault.cluster.policy.show"
+              @models={{array "acl" policy.name}}
+              class="engine-table__path has-text-black has-text-weight-semibold"
+            >
+              <Icon @name="file" class="has-text-grey-light" />
+              <span>{{policy.name}}</span>
+            </LinkTo>
+            <div class="access-view__sources">
+              {{#each policy.sources as |source|}}
+                {{#if source.groupId}}
+                  <LinkTo
+                    @route="vault.cluster.access.identity.show"
+                    @models={{array "groups" source.groupId "details"}}
+                    class="tag"
+                    data-test-access-source
+                  >
+                    <Icon @name="users" />
+                    {{source.label}}{{if source.inherited " (inherited)"}}
+                  </LinkTo>
+                {{else}}
+                  <span class="tag" data-test-access-source>{{source.label}}</span>
+                {{/if}}
+              {{/each}}
+            </div>
+          </LinkedBlock>
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="engine-table engine-table__empty has-text-grey" data-test-access-no-policies>
+        No policies apply to
+        {{@model.name}}
+        through the identity system.
+      </div>
+    {{/if}}
+    {{#if this.unreadableGroupCount}}
+      <p class="page-subtitle" data-test-access-unreadable>
+        {{this.unreadableGroupCount}}
+        {{if (eq this.unreadableGroupCount 1) "group" "groups"}}
+        could not be read, so the list can be incomplete.
+      </p>
+    {{/if}}
+  </section>
+
+  <section class="access-view__section">
+    <h2 class="title is-5">Groups</h2>
+    {{#if this.groups.length}}
+      <div class="engine-table engine-table--access-groups">
+        <div class="engine-table__head" aria-hidden="true">
+          <span>Group</span>
+          <span>Membership</span>
+          <span>Policies</span>
+        </div>
+        {{#each this.groups as |group|}}
+          <LinkedBlock
+            @params={{array "vault.cluster.access.identity.show" "groups" group.id "details"}}
+            class="list-item-row engine-table__row is-no-underline"
+            data-test-access-group={{group.name}}
+          >
+            <LinkTo
+              @route="vault.cluster.access.identity.show"
+              @models={{array "groups" group.id "details"}}
+              class="engine-table__path has-text-black has-text-weight-semibold"
+            >
+              <Icon @name="users" class="has-text-grey-light" />
+              <span>{{group.name}}</span>
+            </LinkTo>
+            <div>
+              <span class="tag">{{if group.inherited "Inherited" "Direct"}}</span>
+            </div>
+            <div class="has-text-grey">
+              {{if group.policies.length (join ", " group.policies) "None"}}
+            </div>
+          </LinkedBlock>
+        {{/each}}
+      </div>
+    {{else if (not this.isLoading)}}
+      <div class="engine-table engine-table__empty has-text-grey" data-test-access-no-groups>
+        {{@model.name}}
+        is not a member of a group.
+      </div>
+    {{/if}}
+  </section>
+
+  <section class="access-view__section">
+    <h2 class="title is-5">Logins</h2>
+    {{#if @model.aliases.length}}
+      <div class="engine-table engine-table--access-groups">
+        <div class="engine-table__head" aria-hidden="true">
+          <span>Alias</span>
+          <span>Auth method</span>
+          <span>Mount accessor</span>
+        </div>
+        {{#each @model.aliases as |alias|}}
+          <LinkedBlock
+            @params={{array "vault.cluster.access.identity.aliases.show" "entities" alias.id "details"}}
+            class="list-item-row engine-table__row is-no-underline"
+            data-test-access-alias={{alias.name}}
+          >
+            <LinkTo
+              @route="vault.cluster.access.identity.aliases.show"
+              @models={{array "entities" alias.id "details"}}
+              class="engine-table__path has-text-black has-text-weight-semibold"
+            >
+              <Icon @name="user" class="has-text-grey-light" />
+              <span>{{alias.name}}</span>
+            </LinkTo>
+            <div>
+              <span class="tag">{{alias.mountType}}</span>
+              <span class="has-text-grey">{{alias.mountPath}}</span>
+            </div>
+            <code class="has-text-grey is-size-8">{{alias.mountAccessor}}</code>
+          </LinkedBlock>
+        {{/each}}
+      </div>
+    {{else}}
+      <div class="engine-table engine-table__empty has-text-grey" data-test-access-no-aliases>
+        {{@model.name}}
+        has no alias, so no login maps to this entity.
+      </div>
+    {{/if}}
+  </section>
+</div>
